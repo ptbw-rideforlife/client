@@ -13,7 +13,7 @@ export const Container = props => {
   return (
     <div
       { ...props }
-      style = { style() }
+      style = { style(props.style) }
     >
        { props.children }
     </div>
@@ -31,7 +31,7 @@ export const GoBack = props => {
   return (
     <span
       { ...props }
-      style = { style() }
+      style = { style(props.style) }
     >
        &lt; go back
     </span>

@@ -1,10 +1,13 @@
 import React from 'react';
+import { Container, GoBack } from './simple-library';
 
 function App() {
   return (
-    <div style = {{ textAlign: 'center' }}>
-      Ride for Life
-    </div>
+    <Container
+      blue
+    >
+      <GoBack />
+    </Container>
   );
 }
 

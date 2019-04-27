@@ -1,14 +1,96 @@
-import React from 'react';
-import { Container, GoBack } from './simple-library';
+import React, { Component } from 'react';
+// import Homepage from './components/Homepage/Homepage';
+// import { Container, Button, Text } from './simple-library';
 
-function App() {
+class App extends Component {
+  state = {
+    count: 0,
+    increment: 0,
+    response: false
+  }
+
+  count = num => {
+    this.setState({ interval: setInterval(this.increment, 1000), count: num * 60 })
+  }
+
+  increment = () => {
+    if(this.state.increment === this.state.count) {
+      this.setState({ increment: 0, count: 0, interval: '' })
+    } else {
+      this.setState({ increment: this.state.increment + 1 })
+    }
+  }
+
+  render() {
+    return (
+      <div style = {{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        width: '100vw',
+        position: 'relative'
+      }}>
+      <span
+        style = {{
+          fontSize: '40px',
+          position: 'absolute',
+          top: '5vh',
+          left: '49.5vw'
+        }}
+      >
+        { this.state.increment }
+      </span>
+        <Button 
+          style = {{padding: '10px 20px', cursor: 'pointer'}} 
+          begin = { this.count }
+          val = { 2 }
+        />
+        <Button 
+          style = {{padding: '10px 20px', cursor: 'pointer'}} 
+          begin = { this.count }
+          val = { 5 }
+        />
+        <Button 
+          style = {{padding: '10px 20px', cursor: 'pointer'}} 
+          begin = { this.count }
+          val = { 10 }
+        />
+      </div>  
+    );
+  }
+}
+
+const Button = props => {
   return (
-    <Container
-      blue
+    <button
+      val = { props.val }
+      onClick = { () => props.begin(props.val) }
     >
-      <GoBack />
-    </Container>
-  );
+      { props.val } Minutes
+    </button>
+  )
 }
 
 export default App;
+
+// <Homepage />
+
+    // <Container
+    //   style = {{
+    //     display: 'flex',
+    //     alignItems: 'center',
+    //     justifyContent: 'center'
+    //   }}
+    //   profile
+    // >
+    //   <Button cancel />
+    //   <Button save />
+    //   <Button delete />
+    //   <Button style = {{
+    //     padding: '10px 50px'
+    //   }}>
+    //     default
+    //   </Button> 
+    // </Container>

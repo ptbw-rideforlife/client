@@ -5,7 +5,7 @@ const Homepage = () => {
   return (
     <Container 
       home
-      //img = { require('./Home.png') }
+      img = { require('./homepage-desktop-img.jpg') }
       style = {{
         display: 'flex',
         flexDirection: 'column',

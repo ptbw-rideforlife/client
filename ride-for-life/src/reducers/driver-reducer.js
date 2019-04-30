@@ -11,17 +11,20 @@ import {
     UPDATE_BIO, 
     UPDATING_BIO, 
     ADD_BIO, 
-    ADDING_BIO
+    ADDING_BIO, 
+    FETCH_PREVIOUS_DRIVER, 
+    FETCHING_PREVIOUS_DRIVER
 } from '../actions/driver-actions';
 
 const initialState = {
-    driver: {}, //is this right?
+    driver: {}, //is this right? // yep, as far as i can tell!
     fetchingDriver: false, 
     addingDriver: false, 
     updatingDriver: false, 
     deletingDriver: false, 
     addingBio: false, 
-    updatingBio: false, 
+    updatingBio: false,
+    fetchingPreviousDriver: false, 
     error: null
 }
 
@@ -36,6 +39,7 @@ export const driverReducer = (state = initialState, action) => {
                 deletingDriver: false, 
                 addingBio: false, 
                 updatingBio: false, 
+                fetchingPreviousDriver: false,
                 error: action.payload
             }
         case FETCH_DRIVER: 
@@ -103,6 +107,17 @@ export const driverReducer = (state = initialState, action) => {
             return {
                 ...state, 
                 updatingBio: true
+            }
+        case FETCH_PREVIOUS_DRIVER: 
+            return {
+                ...state, 
+                previous: action.payload, 
+                fetchingPreviousDriver: false
+            }
+        case FETCHING_PREVIOUS_DRIVER: 
+            return {
+                ...state, 
+                fetchingPreviousDriver: true
             }
         default:
             return state

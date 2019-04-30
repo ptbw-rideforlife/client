@@ -5,7 +5,9 @@ import {
     UPDATE_MC, 
     UPDATING_MC, 
     DELETE_MC, 
-    DELETING_MC
+    DELETING_MC, 
+    FETCH_PREVIOUS_MC, 
+    FETCHING_PREVIOUS_MC
 } from '../actions/mc-actions'
 
 const initialState = {
@@ -13,6 +15,7 @@ const initialState = {
     addingMC: false, 
     updatingMC: false, 
     deletingMC: false, 
+    fetchingPrevious: false,
     error: null
 }
 
@@ -25,6 +28,7 @@ export const mcReducer = (state = initialState, action) => {
                 addingMC: false, 
                 updatingMC: false, 
                 deletingMC: false, 
+                fetchingPrevious: false,
                 error: action.payload
             }
         case ADD_MC: 
@@ -59,6 +63,17 @@ export const mcReducer = (state = initialState, action) => {
             return {
                 ...state, 
                 deletingMC: true
+            }
+        case FETCH_PREVIOUS_MC: 
+            return {
+                ...state, 
+                previous: action.payload, 
+                fetchingPrevious: false
+            }
+        case FETCHING_PREVIOUS_MC: 
+            return {
+                ...state, 
+                fetchingPrevious: true
             }
         default: 
             return state

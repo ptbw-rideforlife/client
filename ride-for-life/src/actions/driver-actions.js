@@ -15,13 +15,15 @@ export const UPDATE_BIO = 'UPDATE_BIO';
 export const UPDATING_BIO = 'UPDATING_BIO';
 export const ADD_BIO = 'ADD_BIO';
 export const ADDING_BIO = 'ADDING_BIO';
+export const FETCH_PREVIOUS_DRIVER = 'FETCH_PREVIOUS_DRIVER';
+export const FETCHING_PREVIOUS_DRIVER = 'FETCHING_PREVIOUS_DRIVER';
 
 // export const ADD_IMAGE = 'ADD_IMAGE';                these are for stretch goals
 // export const DELETE_IMAGE = 'DELETE_IMAGE';
 // export const FETCH_IMAGES = 'FETCH_IMAGES';
 
 export const fetchDriver = () => {
-    const drivers = axios.get('https://ride4life.herokuapp.com/driver');
+    const drivers = axios.get('https://ride4life.herokuapp.com/driver/${driver.id}');
     return dispatch => {
         dispatch({ type: FETCHING_DRIVER })
         drivers
@@ -134,6 +136,26 @@ export const updateBio = driver => {
             .catch(error => {
                 dispatch({
                     type: DRIVER_ERROR,
+                    payload: error
+                })
+            })
+    }
+}
+
+export const fetchPreviousDriver = () => {
+    const previous = axios.get('https://ride4life.herokuapp.com/driver/${driver.id}/previous')
+    return dispatch => {
+        dispatch({ type: FETCHING_PREVIOUS_DRIVER });
+        previous
+            .then(({data }) => {
+                dispatch({
+                    type: FETCH_PREVIOUS_DRIVER, 
+                    payload: data
+                })
+            })
+            .catch(error => {
+                dispatch({
+                    type: DRIVER_ERROR, 
                     payload: error
                 })
             })

@@ -9,6 +9,8 @@ export const UPDATE_MC = 'UPDATE_MC';
 export const UPDATING_MC = 'UPDATING_MC';
 export const DELETE_MC = 'DELETE_MC';
 export const DELETING_MC = 'DELETING_MC';
+export const FETCH_PREVIOUS_MC = 'FETCH_PREVIOUS_MC';
+export const FETCHING_PREVIOUS_MC = 'FETCHING_PREVIOUS_MC';
 
 export const addMC = () => {
     const newMC = axios.post('https://ride4life.herokuapp.com/users', newMC)
@@ -58,6 +60,26 @@ export const deleteMC = user => {
             .catch(error => {
                 dispatch({
                     type: MC_ERROR, 
+                    payload: error
+                })
+            })
+    }
+}
+
+export const fetchPreviousMC = () => {
+    const previous = axios.get('https://ride4life.herokuapp.com/user/${user.id}/previous')
+    return dispatch => {
+        dispatch({ type: FETCHING_PREVIOUS_MC });
+        previous
+            .then(({ data }) => {
+                dispatch({
+                    type: FETCH_PREVIOUS_MC,
+                    payload: data
+                })
+            })
+            .catch(error => {
+                dispatch({
+                    type: MC_ERROR,
                     payload: error
                 })
             })

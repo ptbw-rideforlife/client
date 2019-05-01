@@ -1,60 +1,56 @@
-import React from "react";
+import React, { Component } from "react";
+import { Route, Link } from 'react-router-dom';
+
 import { Container, Button } from '../../simple-library';
 
-const Homepage = () => {
-  return (
-    <Container 
-      home
-      img = { require('./homepage-desktop-img.jpg') }
-      style = {{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}
-    >
-      <TopButtons>
-        <Button
-          style = { topBtn }
-        >
-          Log In
-        </Button>
-        <Button
-          style = { topBtn }
-        >
-          Sign Up
-        </Button>
-      </TopButtons>
-      <div className="main-text">Welcome to the New Standard of Care.</div>
-      <MainButtons>
-        <Button
-          style = { mainBtn }
-        >
-          Learn More
-        </Button>
-        <Button
-          style = { mainBtn }
-        >
-          Sign Up
-        </Button>
-      </MainButtons>
-    </Container>
-  );
-};
-
-const TopButtons = props => {
-  const style = {
-    position: 'absolute',
-    top: '0',
-    right: '0'
+class Homepage extends Component {
+  container = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 
-  return (
-    <div style = { style }>
-      { props.children }
-    </div>
-  );
-}
+  render() {
+    return (
+      <Container 
+        home
+        img = 
+        style = { this.container }
+      >
+        <TopButtons>
+          <Button
+            style = { topBtn }
+          >
+            Log In
+          </Button>
+          <Button
+            style = { topBtn }
+          >
+            Sign Up
+          </Button>
+        </TopButtons>
+        <div>
+          
+        </div>
+        <MainButtons>
+          <Button
+            style = { mainBtn }
+          >
+            Learn More
+          </Button>
+          <Button
+            style = { mainBtn }
+          >
+            Sign Up
+          </Button>
+        </MainButtons>
+      </Container>
+    );
+  }
+};
+
+
 
 const topBtn = {
   background: 'none',

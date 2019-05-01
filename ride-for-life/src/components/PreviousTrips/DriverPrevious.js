@@ -1,11 +1,9 @@
 import React from 'react';
-import { Previous, GoBack, Button, Hamburger } from '../../simple-library';
+import { Previous, Button } from '../../simple-library';
 
 const DriverPrevious = props => {
     return (
         <Container>
-            <GoBack />
-            <Hamburger />
             {props.driver.previous.map(previous => {
                 return (
                     <Previous>

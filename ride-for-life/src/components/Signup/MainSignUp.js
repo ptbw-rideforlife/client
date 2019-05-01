@@ -1,12 +1,11 @@
 import React from 'react';
-import { Container, GoBack, Column, Button } from '../../simple-library';
+import { Container, Column, Button } from '../../simple-library';
 
 const MainSignUp = props => {
     return (
         <Container 
             blue
         >
-            <GoBack />
             <Column>
                 <h2>Sign Up</h2>
                 <p>Already have an account? Sign in here -- LINK -- </p>

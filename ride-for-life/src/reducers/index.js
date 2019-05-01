@@ -6,9 +6,9 @@ import { reviewReducer } from './review-reducer';
 import { rideReducer } from './ride-reducer';
 
 export default combineReducers({
-    driverReducer, 
-    generalReducer, 
-    mcReducer, 
-    reviewReducer, 
-    rideReducer
+    // driverReducer, 
+    // generalReducer, 
+    // mcReducer, 
+    // reviewReducer, 
+    // rideReducer
 })

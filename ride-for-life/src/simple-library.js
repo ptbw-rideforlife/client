@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { build } from '@oclif/command/lib/flags';
 
 export class Container extends Component {
   state = {
@@ -10,9 +9,11 @@ export class Container extends Component {
     ...obj,
     height: this.props.map ? '0' : '100vh',
     width: '100vw',
-    background: this.props.blue ? '#4f6d7a' : this.props.home ? `lightgray` : this.props.map ? 'none' : '#f5f5f5',
+    background: this.props.blue ? '#4f6d7a' : this.props.home ? `url(${this.props.img})` : this.props.map ? 'none' : '#f5f5f5',
     color: this.props.blue ? '#ffffff' : '#707070',
-    position: 'relative'
+    position: 'absolute',
+    top: '0',
+    right: '0'
   })
 
   open = () => {
@@ -28,6 +29,7 @@ export class Container extends Component {
         >
           { this.props.children }
         </div>
+        
       )
     } else if(this.props.profile) {
       return (
@@ -205,7 +207,6 @@ export const Text = props => {
         { ...props }
         style = { style(props.style) }
         type="text"
-        placeholder = { props.placeholder }
       />
     )
   }

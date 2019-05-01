@@ -28,16 +28,18 @@ export const fetchDriver = () => {
         dispatch({ type: FETCHING_DRIVER })
         drivers
             .then(result => {
-                dispatch({
-                    type: FETCH_DRIVER,
-                    payload: result.data
-                })
+                console.log(result)
+                // dispatch({
+                //     type: FETCH_DRIVER,
+                //     payload: result.data
+                // })
             })
             .catch(error => {
-                dispatch({
-                    type: DRIVER_ERROR, 
-                    payload: error
-                })
+                console.log(error)
+                // dispatch({
+                //     type: DRIVER_ERROR, 
+                //     payload: error
+                // })
             })
     }
 }

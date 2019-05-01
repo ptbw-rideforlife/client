@@ -1,70 +1,91 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Container, Text, Column, Form, Button } from '../../simple-library';
 
-export default function Login() {
-  const container = {
+export default class Login extends Component {
+  // state
+  state = {
+    credentials: {
+      phoneNum: '',
+      password: ''
+    }
+  }
+
+  // styles
+  container = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
   }
 
-  const header = {
+  header = {
     fontSize: '2rem'
   }
 
-  const under = {
+  under = {
     fontSize: '0.8rem'
   }
 
-  const column = {
+  column = {
     height: '40vh',
     width: '35vw',
     justifyContent: 'space-around',
   }
 
-  const input = {
+  input = {
     padding: '15px 5px',
     width: '80%'
   }
 
-  return (
-    <Container
-      blue
-      style = { container }
-    >
-      <Column 
-        style = { column }
+  // methods
+  login = event => {
+    event.preventDefault();
+    this.props.login(this.state.credentials)
+      .then(() => {
+        this.props.history.push('/test')
+      })
+  }
+
+  // render
+  render() {
+    return (
+      <Container
+        blue
+        style = { this.container }
       >
-        <div style = { header }>Log In</div>
-        <p style = { under }>Don't have an account? Sign up --LINK--</p>
-        <div></div>
-      </Column>
-      <Form>
         <Column 
-          style = {{
-            ...column,
-            alignItems: 'center'
-          }}
+          style = { this.column }
         >
-          <Text 
-            placeholder="Phone Number"
-            style = { input }
-          />
-          <Text 
-            placeholder="Password"
-            style = { input }
-          />
-          <Button
-            submit
+          <div style = { this.header }>Log In</div>
+          <p style = { this.under }>Don't have an account? Sign up --LINK--</p>
+          <div></div>
+        </Column>
+        <Form>
+          <Column 
             style = {{
-              width: '50%'
+              ...this.column,
+              alignItems: 'center'
             }}
           >
-            Log In
-          </Button>
-        </Column>
-      </Form>
-    </Container>
-  )
+            <Text 
+              placeholder="Phone Number"
+              style = { this.input }
+            />
+            <Text 
+              placeholder="Password"
+              style = { this.input }
+            />
+            <Button
+              submit
+              style = {{
+                width: '50%'
+              }}
+            >
+              Log In
+            </Button>
+          </Column>
+        </Form>
+      </Container>
+    )
+  }
 }
 

@@ -18,16 +18,18 @@ export const fetchReviews = () => {
         dispatch({ type: FETCHING_REVIEWS });
         reviews
             .then(({ data }) => {
-                dispatch({
-                    type: FETCH_REVIEWS,
-                    payload: data
-                })
+                console.log(data)
+                // dispatch({
+                //     type: FETCH_REVIEWS,
+                //     payload: data
+                // })
             })
             .catch(error => {
-                dispatch({
-                    type: REVIEW_ERROR, 
-                    payload: error
-                })
+                console.log(error)
+                // dispatch({
+                //     type: REVIEW_ERROR, 
+                //     payload: error
+                // })
             })
     }
 }
@@ -38,16 +40,18 @@ export const addReview = review => {
         dispatch({ type: ADDING_REVIEW });
         newReview
             .then(({ data }) => {
-                dispatch({
-                    type: ADD_REVIEW, 
-                    payload: data
-                })
+                console.log(data)
+                // dispatch({
+                //     type: ADD_REVIEW, 
+                //     payload: data
+                // })
             })
             .catch(error => {
-                dispatch({
-                    type: REVIEW_ERROR, 
-                    payload: error
-                })
+                console.log(error)
+                // dispatch({
+                //     type: REVIEW_ERROR, 
+                //     payload: error
+                // })
             })
     }
 }
@@ -58,16 +62,17 @@ export const updateReview = review => {
         dispatch({ type: UPDATING_REVIEW });
         updatedReview 
             .then(({ data }) => {
-                dispatch({
-                    type: UPDATE_REVIEW,
-                    payload: data
-                })
+                // dispatch({
+                //     type: UPDATE_REVIEW,
+                //     payload: data
+                // })
             })
             .catch(error => {
-                dispatch({
-                    type: REVIEW_ERROR, 
-                    payload: error
-                })
+                console.log(error)
+                // dispatch({
+                //     type: REVIEW_ERROR, 
+                //     payload: error
+                // })
             })
     }
 }
@@ -78,16 +83,18 @@ export const deleteReview = review => {
         dispatch({ type: DELETING_REVIEW });
         deletedReview
             .then(({ data }) => {
-                dispatch({
-                    type: DELETE_DRIVER,
-                    payload: data
-                })
+                console.log(data)
+                // dispatch({
+                //     type: DELETE_DRIVER,
+                //     payload: data
+                // })
             })
             .catch(error => {
-                dispatch({
-                    type: REVIEW_ERROR, 
-                    payload: error
-                })
+                console.log(error)
+                // dispatch({
+                //     type: REVIEW_ERROR, 
+                //     payload: error
+                // })
             })
     }
 }

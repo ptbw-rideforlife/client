@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Column, GoBack, Previous, Hamburger, Menu } from '../../simple-library';
+import { Container, Column, Previous } from '../../simple-library';
 
 const DriverProfile = props => { //pass in driver info
     const bioStyle = {
@@ -21,9 +21,6 @@ const DriverProfile = props => { //pass in driver info
 
     return (
         <Container>
-            <GoBack />
-            <Hamburger />
-            <Menu />
             <Column>
                 {/* <img src='${props.driver.photos.photo1}' /> */} // stretch
                 <h2>{props.driver.firstName} {props.driver.lastName}</h2>

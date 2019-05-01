@@ -1,26 +1,25 @@
 import axios from 'axios';
 
-export const LOGIN_START = 'LOGIN_START';
-export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-export const LOGIN_FAILED = 'LOGIN_FAILED';
+export const USER_LOGIN_START = 'USER_LOGIN_START';
+export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS';
+export const USER_LOGIN_FAILED = 'USER_LOGIN_FAILED';
 
-export const login = creds => dispatch => {
-  dispatch({ type: LOGIN_START });
+export const userLogin = creds => dispatch => {
+  dispatch({ type: USER_LOGIN_START });
   return axios
-    .post('http://localhost:5000/api/login', creds)
+    .post('https://ride4life.herokuapp.com/login/users', creds)
     .then(res => {
       console.log(res)
-      localStorage.setItem('token', res.data.payload)
-      dispatch({ type: LOGIN_SUCCESS })
+      localStorage.setItem('token', res.data.token)
+      dispatch({ type: USER_LOGIN_SUCCESS })
     })
     .catch(err => {
-      console.log(err.response)
-      if(err.response.status === 403) {
+      if(err) {
         localStorage.removeItem('token')
       }
       dispatch({
-        type: LOGIN_FAILED,
-        payload: err.response
+        type: USER_LOGIN_FAILED,
+        payload: 'FAILED'
       })
     })
 }

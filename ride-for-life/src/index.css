@@ -54,5 +54,17 @@ table {
   padding: 0;
 	box-sizing: border-box;
 	font-Family: 'Source Serif Pro', serif;
-	
+	overflow: hidden;
+}
+
+h2 {
+	font-family: 'Source Serif Pro', serif;
+	color: #4f6d7a;
+	font-weight: 400;
+}
+
+h4 {
+	font-family: 'Source Serif Pro', serif;
+	color: #707070;
+	font-weight: 300;
 }

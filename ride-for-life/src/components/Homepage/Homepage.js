@@ -15,21 +15,25 @@ class Homepage extends Component {
     return (
       <Container 
         home
-        img = 
+        img = { require('../../assets/views/home.jpeg') }
         style = { this.container }
       >
-        <TopButtons>
-          <Button
-            style = { topBtn }
-          >
-            Log In
-          </Button>
-          <Button
-            style = { topBtn }
-          >
-            Sign Up
-          </Button>
-        </TopButtons>
+        <Top>
+          <Link to="/login">
+            <Button
+              style = { topBtn }
+            >
+              Log In
+            </Button>
+          </Link>
+          <Link to="/signup">
+            <Button
+              style = { topBtn }
+            >
+              Sign Up
+            </Button>
+          </Link>
+        </Top>
         <div>
           
         </div>
@@ -50,7 +54,32 @@ class Homepage extends Component {
   }
 };
 
+const Top = props => {
+  const style = {
+    position: 'absolute',
+    top: '0',
+    right: '0'
+  }
 
+  return (
+    <div style = { style }>
+      { props.children }
+    </div>
+  );
+}
+
+const Header = props => {
+  const style = {
+    fontSize: '2rem',
+    color: 'white'
+  }
+
+  return (
+    <h1 style = { style }>
+      { props.children }
+    </h1>
+  )
+}
 
 const topBtn = {
   background: 'none',

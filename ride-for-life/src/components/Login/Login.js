@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import axios from 'axios';
+
+import { userLogin } from '../../actions';
 import { Container, Text, Column, Form, Button } from '../../simple-library';
 
-export default class Login extends Component {
+class Login extends Component {
   // state
   state = {
     credentials: {
-      phoneNum: '',
+      phoneNumber: '',
       password: ''
     }
   }
@@ -28,64 +32,92 @@ export default class Login extends Component {
   column = {
     height: '40vh',
     width: '35vw',
-    justifyContent: 'space-around',
+    justifyContent: 'space-around'
   }
 
   input = {
     padding: '15px 5px',
-    width: '80%'
+    width: '100%'
   }
 
   // methods
-  login = event => {
+  login = event => {    
     event.preventDefault();
-    this.props.login(this.state.credentials)
-      .then(() => {
-        this.props.history.push('/test')
-      })
+    this.props.userLogin(this.state.credentials)
+      .then(() => this.props.history.push('/test'))
+  }
+
+  handleChange = event => {
+    this.setState({
+      credentials: {
+        ...this.state.credentials,
+        [event.target.name]: event.target.value
+      }
+    })
   }
 
   // render
   render() {
-    return (
-      <Container
-        blue
-        style = { this.container }
-      >
-        <Column 
-          style = { this.column }
+    const { phoneNumber, password } = this.state.credentials;
+
+    if(this.props.loggingIn) {
+      return <div>logging in, temp</div>
+    } else {
+      return (
+        <Container
+          blue
+          style = { this.container }
         >
-          <div style = { this.header }>Log In</div>
-          <p style = { this.under }>Don't have an account? Sign up --LINK--</p>
-          <div></div>
-        </Column>
-        <Form>
           <Column 
-            style = {{
-              ...this.column,
-              alignItems: 'center'
-            }}
+            style = { this.column }
           >
-            <Text 
-              placeholder="Phone Number"
-              style = { this.input }
-            />
-            <Text 
-              placeholder="Password"
-              style = { this.input }
-            />
-            <Button
-              submit
+            <div style = { this.header }>Log In</div>
+            <p style = { this.under }>Don't have an account? Sign up --LINK--</p>
+            <div></div>
+          </Column>
+          <Form
+            onSubmit = { this.login }
+          >
+            <Column 
               style = {{
-                width: '50%'
+                ...this.column,
+                alignItems: 'center'
               }}
             >
-              Log In
-            </Button>
-          </Column>
-        </Form>
-      </Container>
-    )
+              <Text 
+                name="phoneNumber"
+                type="number"
+                value = { phoneNumber }
+                placeholder="Phone Number"
+                style = { this.input }
+                onChange = { this.handleChange }
+              />
+              <Text 
+                name="password"
+                type="password"
+                value = { password }
+                placeholder="Password"
+                style = { this.input }
+                onChange = { this.handleChange }
+              />
+              <Button
+                submit
+                style = {{
+                  width: '50%'
+                }}
+              >
+                Log In
+              </Button>
+            </Column>
+          </Form>
+        </Container>
+      )
+    }
   }
 }
 
+const mapStateToProps = state => ({
+  loggingIn: state.loginReducer.loggingIn
+})
+
+export default connect(mapStateToProps, { userLogin })(Login)

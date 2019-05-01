@@ -187,7 +187,6 @@ export const Text = props => {
     ...obj,
     borderRadius: '2px',
     border: '1px solid #e89980',
-    width: props.width,
     cols: props.cols,
     rows: props.rows
   })
@@ -206,7 +205,6 @@ export const Text = props => {
       <input
         { ...props }
         style = { style(props.style) }
-        type="text"
       />
     )
   }
@@ -238,7 +236,6 @@ export const Form = props => {
     <form
       { ...props }
       style = { style(props.style) }
-      onSubmit = { event => props.submit(event) }
     >
       { props.children }
     </form>
@@ -254,8 +251,9 @@ export const Previous = props => {
     borderRadius: '5px',
     color: '#707070',
     display: 'flex',
+    flexDirection: '',
     justifyContent: 'space-between',
-    padding: '10px'
+    padding: '10px 30px'
   })
 
   return (

@@ -6,14 +6,14 @@ export class Container extends Component {
   }
 
   container = obj => ({
-    ...obj,
     height: this.props.map ? '0' : '100vh',
     width: '100vw',
     background: this.props.blue ? '#4f6d7a' : this.props.home ? `url(${this.props.img})` : this.props.map ? 'none' : '#f5f5f5',
     color: this.props.blue ? '#ffffff' : '#707070',
     position: 'absolute',
     top: '0',
-    right: '0'
+    right: '0',
+    ...obj,
   })
 
   open = () => {
@@ -134,8 +134,8 @@ const Menu = props => {
 
 export const Button = props => {
   const style = obj => ({
-    background: props.cancel ? '#f5f5f5' : props.delete ? '#ED1111' : props.default ? '#4f6d7a' : '#e89980',
-    color: props.cancel ? '#707070' : '#fff',
+    background: props.cancel ? '#f5f5f5' : props.delete ? '#ED1111' : props.default ? '#4f6d7a' : props.logout ? '#ffffff' : '#e89980',
+    color: props.cancel ? '#707070' : props.logout ? '#4f6d7a' : '#fff',
     border: props.cancel ? '1px solid #707070' : 'none',
     borderRadius: '5px',
     padding: '10px 25px',
@@ -160,6 +160,14 @@ export const Button = props => {
         style = { style(props.style) }
       >
         Delete
+      </button>
+    )
+  } else if(props.logout) {
+    return (
+      <button
+        {...props}
+        style = { style(props.style) } >
+        Log Out 
       </button>
     )
   } else if(props.submit) {
@@ -253,16 +261,28 @@ export const Previous = props => {
     display: 'flex',
     flexDirection: '',
     justifyContent: 'space-between',
-    padding: '10px 30px'
+    padding: props.profile ? '5px' : '10px 30px',
   })
 
-  return (
+  if(props.profile) {
+    return (
+      <div
+        {...props}
+        style = { style(props.style) } >
+        {props.children}
+      </div>
+    )
+  }
+
+  else {
+    return (
     <div
       {...props}
       style = { style(props.style) }>
         {props.children}
     </div>
-  )
+    )
+  }
 }
 
 

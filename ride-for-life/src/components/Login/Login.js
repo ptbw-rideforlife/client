@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 
 import { userLogin } from '../../actions';
 import { Container, Text, Column, Form, Button } from '../../simple-library';

@@ -2,19 +2,28 @@ import React from 'react';
 import { Container, Column, Button } from '../../simple-library';
 
 const DriverUser = props => { //need to pass driver's first name here
+    const userContainer = {
+        display: 'flex'
+    }
+
+    const userColumn = {
+        alignItems: 'center'
+    }
+
     return (
         <Container
             blue
+            style={userColumn}
         >
-            <Column>
+            <Column style={userColumn}>
                 {/* <img src='{driver.photo1}' /> */}
-                <h2>Hi, {user.firstName}!</h2>
+                <h2>Hi, {props.driver.firstName}!</h2>
             </Column>
-            <Column>
-              <Button save>View Profile</Button>
-              <Button save> Edit Profile</Button>
-              <Button save>Previous Trips</Button>
-              <Button logout>Log Out</Button>
+            <Column style={userColumn}>
+              <Button default>View Profile</Button>
+              <Button default> Edit Profile</Button>
+              <Button default>Previous Trips</Button>
+              <Button logout />
             </Column>
         </Container>
     )

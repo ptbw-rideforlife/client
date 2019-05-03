@@ -4,11 +4,20 @@ import { Route, Link } from 'react-router-dom';
 import { Container, Button } from '../../simple-library';
 
 class Homepage extends Component {
+  state = {
+    signUpHover: false,
+    logInHover: false
+  }
+
   container = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center'
+  }
+
+  openForm = form => {
+    this.props.history.push(`signup/${form}`)
   }
 
   render() {
@@ -26,13 +35,38 @@ class Homepage extends Component {
               Log In
             </Button>
           </Link>
-          <Link to="/signup">
-            <Button
-              style = { topBtn }
-            >
-              Sign Up
-            </Button>
-          </Link>
+          <div
+            onMouseEnter = { this.state.signUpHover ? null : () => this.setState({ signUpHover: true }) }
+            onMouseLeave = { this.state.signUpHover ? () => this.setState({ signUpHover: false }) : null }
+          >
+            { this.state.signUpHover ? 
+              <div style = {{
+                display: 'flex',
+                flexDirection: 'column'
+              }}>
+              <Button 
+                style = { topBtn }
+                onClick = { () => this.openForm('driver') }
+              >
+                Driver
+              </Button>
+              <Button 
+                style = { topBtn }
+                onClick = { () => this.openForm('mother') }
+              >
+                Mother
+              </Button>
+              <Button 
+                style = { topBtn }
+                onClick = { () => this.openForm('caregiver') }
+              >
+                Caregiver
+              </Button>
+              </div>
+            : 
+              <Button>Sign Up</Button>
+            }
+          </div>
         </Top>
         <div>
           
@@ -58,7 +92,8 @@ const Top = props => {
   const style = {
     position: 'absolute',
     top: '0',
-    right: '0'
+    right: '0',
+    display: 'flex'
   }
 
   return (

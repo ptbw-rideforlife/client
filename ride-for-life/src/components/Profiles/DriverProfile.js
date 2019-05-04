@@ -9,9 +9,14 @@ const DriverProfile = props => { //pass in driver info
     
     const driverNumbers = {
         backgroundColor: '#e89980',
-        width: '100%',
+        width: '80%',
         height: props.height,
-        display: 'flex'
+        display: 'flex',
+        padding: '10px',
+        display: 'flex',
+        justifyContent: 'space-around',
+        borderRadius: '10px',
+        margin: '0 auto'
     }
 
     const driverPrice = {
@@ -19,10 +24,39 @@ const DriverProfile = props => { //pass in driver info
         borderRight: '1px solid #707070'
     }
 
+    const profileContainer = {
+        display: 'flex',
+        justifyContent: 'space-around'
+    }
+
+    const profileColumn = {
+        width: '45%',
+        justifyContent: 'space-around'
+    }
+
+    const firstColumn = {
+        position: 'absolute'
+    }
+
+    const driverStat = {
+        textAlign: 'center',
+        color: 'white',
+        width: '30%'
+    }
+
+    const driverPrice = {
+        borderLeft: '2px solid #707070',
+        borderRight: '2px solid #707070',
+        textAlign: 'center',
+        color: 'white',
+        width: '30%',
+        padding: '0 20px'
+    }
+
     return (
-        <Container>
-            <Column>
-                {/* <img src='${props.driver.photos.photo1}' /> */} // stretch
+        <Container style={profileContainer}>
+            <Column style={profileColumn} style={firstColumn}>
+                {/* <img src='${props.driver.photos.photo1}' /> */}
                 <h2>{props.driver.firstName} {props.driver.lastName}</h2>
                 <h2>{props.driver.address}</h2>
                 <div style={bioStyle}>
@@ -32,18 +66,20 @@ const DriverProfile = props => { //pass in driver info
             </Column>
             <Column>
                 <div style={driverNumbers}>
-                    <div>${props.driver.trips} Trips</div>
+                    <div style={driverStat}>${props.driver.trips} Trips</div>
                     <div style={driverPrice}>${props.driver.price} Price per Mile</div>
-                    <div>${props.driver.averageRating} Average Rating</div>
+                    <div style={driverStat}>${props.driver.averageRating} Average Rating</div>
                 </div>
                 <h3>Reviews:</h3>
-                {/* {props.driver.previous.map()}  */} 
-                    <Previous>
-                        <p>{props.driver.previous.rating}</p>
-                        {/* if statement for null review here */}
-                        <p>{props.driver.previous.review}</p> 
-                        <p>{props.driver.previous.firstName}</p>
-                    </Previous>
+                {props.driver.previous.map(previous => {
+                    return (
+                        <Previous profile>
+                            <p>Rating: {props.driver.previous.rating}</p>
+                            <p>{props.driver.previous.reviewCompleted ? props.driver.previous.review : null}</p>
+                            <p>{props.driver.previous.firstName}</p>
+                        </Previous>
+                    )
+                })}
             </Column>
         </Container>
     )

@@ -105,7 +105,7 @@ export const deleteDriver = driver => {
 }
 
 export const addBio = driver => {
-    const newBio = axios.post('https://ride4life.herokuapp.com/driver/${driver.id}/bio', newBio) //don't have this, will need back end
+    const newBio = axios.post('https://ride4life.herokuapp.com/driver/${driver.id}/bio', newBio)
     return dispatch => {
         dispatch({ type: ADDING_BIO });
         newBio

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 
 export class Container extends Component {
   state = {
@@ -6,14 +7,14 @@ export class Container extends Component {
   }
 
   container = obj => ({
-    ...obj,
     height: this.props.map ? '0' : '100vh',
     width: '100vw',
     background: this.props.blue ? '#4f6d7a' : this.props.home ? `url(${this.props.img})` : this.props.map ? 'none' : '#f5f5f5',
     color: this.props.blue ? '#ffffff' : '#707070',
     position: 'absolute',
     top: '0',
-    right: '0'
+    right: '0',
+    ...obj,
   })
 
   open = () => {
@@ -66,9 +67,10 @@ export class Container extends Component {
 const GoBack = () => {
   const style = {
     position: 'absolute',
-    top: '3vh',
+    top: '2vh',
     left: '2vh',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    fontFamily: 'Source Sans Pro'
   }
 
   return (
@@ -96,12 +98,16 @@ const Hamburger = props => {
     margin: '4px 0'
   })
 
+  const x = {
+    color: '#4f6d7a',
+  }
+
   return (
     <div 
       style = { container }
       onClick = { () => props.open() }
     >
-      { props.isOpen ? "X" :
+      { props.isOpen ? <p style={x}>X</p> :
         <>
         <div style = { line(props.blue) }></div>
         <div style = { line(props.blue) }></div>
@@ -118,29 +124,50 @@ const Menu = props => {
     width: '25vw',
     height: '100vh',
     right: open ? '0' : '-25vw',
-    background: '#4f6d7a',
-    borderLeft: '2px solid white',
-    transition: 'right 1s ease'
+    background: '#ffffff',
+    borderLeft: '1px solid white',
+    transition: 'right 1s ease',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    padding: '50px 0'
   })
+
+  const style = {
+    fontSize: '25px',
+    textDecoration: 'none',
+    fontFamily: 'Source Sans Pro',
+    textAlign: 'center',
+    color: '#4f6d7a',
+    background: 'none',
+    border: 'none',
+    fontWeight: '600',
+
+  }
 
   return (
     <div
       style = { container(props.open) }
     >
-      temp
+      <NavLink to='' style= { style }>My Account</NavLink>
+      <NavLink to='' style= { style }>My Profile</NavLink>
+      <NavLink to='' style= { style }>About</NavLink>
+      <button style= { style }>Log Out</button>
     </div>
   )
 }
 
 export const Button = props => {
   const style = obj => ({
-    background: props.cancel ? '#f5f5f5' : props.delete ? '#ED1111' : props.default ? '#4f6d7a' : '#e89980',
-    color: props.cancel ? '#707070' : '#fff',
+    background: props.cancel ? '#f5f5f5' : props.delete ? '#ED1111' : props.default ? '#4f6d7a' : props.logout ? '#ffffff' : '#e89980',
+    color: props.cancel ? '#707070' : props.logout ? '#4f6d7a' : '#fff',
     border: props.cancel ? '1px solid #707070' : 'none',
     borderRadius: '5px',
     padding: '10px 25px',
+    margin: '10px 0',
     cursor: 'pointer',
     textAlign: 'center',
+    fontSize: '14px',
     ...obj
   })
 
@@ -160,6 +187,14 @@ export const Button = props => {
         style = { style(props.style) }
       >
         Delete
+      </button>
+    )
+  } else if(props.logout) {
+    return (
+      <button
+        {...props}
+        style = { style(props.style) } >
+        Log Out 
       </button>
     )
   } else if(props.submit) {
@@ -187,7 +222,6 @@ export const Text = props => {
     ...obj,
     borderRadius: '2px',
     border: '1px solid #e89980',
-    width: props.width,
     cols: props.cols,
     rows: props.rows
   })
@@ -206,7 +240,6 @@ export const Text = props => {
       <input
         { ...props }
         style = { style(props.style) }
-        type="text"
       />
     )
   }
@@ -238,7 +271,6 @@ export const Form = props => {
     <form
       { ...props }
       style = { style(props.style) }
-      onSubmit = { event => props.submit(event) }
     >
       { props.children }
     </form>
@@ -254,17 +286,30 @@ export const Previous = props => {
     borderRadius: '5px',
     color: '#707070',
     display: 'flex',
+    flexDirection: '',
     justifyContent: 'space-between',
-    padding: '10px'
+    padding: props.profile ? '5px' : '10px 30px',
   })
 
-  return (
+  if(props.profile) {
+    return (
+      <div
+        {...props}
+        style = { style(props.style) } >
+        {props.children}
+      </div>
+    )
+  }
+
+  else {
+    return (
     <div
       {...props}
       style = { style(props.style) }>
         {props.children}
     </div>
-  )
+    )
+  }
 }
 
 

@@ -1,25 +1,62 @@
 import React from 'react';
 import { Container, Text, Button } from '../../simple-library';
+import { updateMC, deleteMC } from '../../actions/mc-actions';
 
 class MCEdit extends React.Component {
+    handleInputChange = event => {
+        this.setState({ [event.target.name]: event.target.value})
+    }
+
+    handleUpdate = event => {
+        this.props.updateMC()
+    }
+
+    handleDelete = event => {
+        this.props.deleteMC()
+    }
+
+    editForm = {
+        margin: '0 auto'
+    }
+
     render() {
         return (
             <Container>
-                <Form>
-                    <Text placeholder='Phone Number' />
-                    <Text placeholder='Address' />
-                    <Text placeholder='Enter New Password' />
-                    <Text placeholder='Re-enter New Password' />
-                    <Button cancel>Cancel</Button>
-                    <Button delete>Delete Profile</Button>
-                    <Button default>Save</Button>
+                <Form style={editForm}>
+                    <Text 
+                        placeholder='Phone Number' 
+                        onChange={this.handleInputChange}
+                        /><br></br>
+                    <Text 
+                        placeholder='Address' 
+                        onChange={this.handleInputChange}
+                        /><br></br>
+                    <Text 
+                        placeholder='Enter New Password' 
+                        onChange={this.handleInputChange}
+                        /><br></br>
+                    <Text 
+                        placeholder='Re-enter New Password' 
+                        onChange={this.handleInputChange}
+                        /><br></br>
+                    {/* need cancel functionality */}
+                    <Button cancel /><br></br>
+                    <Button delete onClick={this.handleDelete}/><br></br>
+                    <Button default onClick={this.handleUpdate}/><br></br>
                 </Form>
             </Container>
         )
     } 
 }
 
-//mapStateToProps
-//export default connect
+const mapStateToProps = state => {
+    return {
+        updatingMC: state.mcReducer.updatingMC,
+        deletingMC: state.mcReducer.deletingMC
+    }
+}
 
-export default MCEdit;
+export default connect(
+    mapStateToProps, 
+    { updateMC, deleteMC }
+)(MCEdit)

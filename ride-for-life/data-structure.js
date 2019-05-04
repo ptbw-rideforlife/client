@@ -6,7 +6,7 @@ export default drivers [
         bio: '',
         rides: 145,
         price: 63.23,
-        address: '',
+        cityCountry: '',
         averageRating: 2.45,  //1-5 possible
         id: 12,
         previous: [
@@ -38,7 +38,7 @@ export default user [
         caregiverFirstName: '',
         caregiverLastName: '',
         phoneNumber: 1234567890,
-        address: '',
+        cityCountry: '',
         id: 34,
         previous: [
             {

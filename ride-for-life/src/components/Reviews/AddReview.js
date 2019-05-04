@@ -30,16 +30,17 @@ export default function AddReview() {
             placeholder="Add a review..."
 
           />
-          <Button
-            submit
-            style = {{
-              width: '25%',
-              alignSelf: 'flex-end',
-              marginTop: '10px'
-            }}
-          >
-            Submit
-          </Button>
+          <div>
+            <Button cancel />
+            <Button delete />
+            <Button
+                submit
+                style = {{
+                  width: '25%',
+                  alignSelf: 'flex-end',
+                  marginTop: '10px'
+                }} />
+          </div>
         </Column>
       </Form>
     </Container>

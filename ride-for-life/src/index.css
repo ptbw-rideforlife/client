@@ -53,18 +53,46 @@ table {
   margin: 0;
   padding: 0;
 	box-sizing: border-box;
-	font-Family: 'Source Serif Pro', serif;
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+body {
 	overflow: hidden;
 }
 
+h1 {
+	font-size: 65px;
+	color: #ffffff;
+	font-family: 'Source Sans Pro', sans-serif;
+	padding-bottom: 30px;
+	font-weight: 700;
+}
+
 h2 {
-	font-family: 'Source Serif Pro', serif;
+	font-family: 'Source Sans Pro', sans-serif;
 	color: #4f6d7a;
-	font-weight: 400;
+	font-weight: 700;
+	font-size: 50px;
+}
+
+h3 {
+	font-family: 'Source Sans Pro', sans-serif;
+	color: #4f6d7a;
+	font-weight: 600;
 }
 
 h4 {
-	font-family: 'Source Serif Pro', serif;
+	font-family: 'Source Sans Pro', sans-serif;
 	color: #707070;
-	font-weight: 300;
+	font-weight: 400;
+}
+
+p {
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+@media (max-width: 600px) {
+	body {
+		overflow-y: scroll;
+	}
 }

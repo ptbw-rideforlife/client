@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import { userLogin } from '../../actions';
 import { Container, Text, Column, Form, Button } from '../../simple-library';
+import { MobileContainer, MobileForm, MobileButton } from '../../simple-library-mobile'
 
 class Login extends Component {
   // state
@@ -20,12 +21,19 @@ class Login extends Component {
     alignItems: 'center'
   }
 
-  header = {
-    fontSize: '2rem'
-  }
+  mobileContainer = {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center'
+ }
+
 
   under = {
-    fontSize: '0.8rem'
+    fontSize: '1rem',
+    paddingBottom: '30px'
   }
 
   column = {
@@ -36,7 +44,26 @@ class Login extends Component {
 
   input = {
     padding: '15px 5px',
-    width: '100%'
+    width: '100%',
+    borderRadius: '10px',
+    fontSize: '14px',
+    margin: '20px 0',
+    borderRadius: '10px'
+  }
+
+  header = {
+    color: '#ffffff'
+  }
+
+  headerMobile = {
+    color: '#ffffff',
+    paddingBottom: '20px'
+  }
+
+  mobileLogin = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center'
   }
 
   // methods
@@ -59,7 +86,43 @@ class Login extends Component {
   render() {
     const { phoneNumber, password } = this.state.credentials;
 
-    if(this.props.loggingIn) {
+    if(this.props.mobile) {
+      if(this.props.loggingIn) {
+        return <div>Logging In...</div>
+      }
+      else {  
+        return (
+          <MobileContainer
+            blue>
+            <div style={this.mobileContainer}>
+                <h2 style={this.headerMobile}>Log In</h2>
+                <p style={this.under}>Don't have an account? Sign up.</p>
+                <MobileForm onSubmit = {this.login} style={this.mobileLogin}>
+                  <Text 
+                    name="phoneNumber"
+                    type="number"
+                    value = { phoneNumber }
+                    placeholder="Phone Number"
+                    style = { this.input }
+                    onChange = { this.handleChange }
+                  />
+                  <Text 
+                    name="password"
+                    type="password"
+                    value = { password }
+                    placeholder="Password"
+                    style = { this.input }
+                    onChange = { this.handleChange }
+                  />
+                  <MobileButton 
+                    submit> Log In</MobileButton>
+                </MobileForm>
+            </div>
+          </MobileContainer>
+        )
+      }
+    }
+    else if(this.props.loggingIn) {
       return <div>logging in, temp</div>
     } else {
       return (
@@ -70,7 +133,7 @@ class Login extends Component {
           <Column 
             style = { this.column }
           >
-            <div style = { this.header }>Log In</div>
+            <h2 style={this.header}>Log In</h2>
             <p style = { this.under }>Don't have an account? Sign up --LINK--</p>
             <div></div>
           </Column>

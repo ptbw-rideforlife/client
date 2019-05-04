@@ -1,5 +1,7 @@
 import React from 'react';
 import { Container, Text, Button } from '../../simple-library';
+import { updateDriver, updateBio, deleteDriver } from '../../actions/driver-actions';
+
 
 class DriverEdit extends React.Component {
     state = {
@@ -25,6 +27,18 @@ class DriverEdit extends React.Component {
         bottom: '10px'
     }
 
+    handleUpdateBio = event => {
+        this.props.updateBio()
+    }
+
+    handleUpdateDriver = event => {
+        this.props.updateDriver()
+    }
+
+    handleDelete = event => {
+        this.props.deleteDriver()
+    }
+
     handleInputChange = event => {
         this.setState({ [event.target.name]: event.target.value})
     }
@@ -42,13 +56,13 @@ class DriverEdit extends React.Component {
                     <div style={bioStyle}>
                         <h4>About {props.driver.firstName}</h4>
                         {this.state.editing 
-                            ?  <div>
-                                    <p>{props.driver.bio}</p>
-                                    <Button style={editBio} onClick={() => this.editing()}>Edit Bio</Button> 
+                            ?   <div>
+                                    <Text textarea />
+                                    <Button style={editBio} onClick={this.handleUpdateBio}>Save Bio</Button>
                                 </div>
                             :   <div>
-                                    <Text textarea />
-                                    <Button style={editBio}>Save Bio</Button>
+                                    {props.driver.bio ? <p>{props.driver.bio}</p> : null}
+                                    <Button style={editBio} onClick={() => this.editing()}>Edit Bio</Button> 
                                 </div>
                         }
                     </div>
@@ -72,9 +86,10 @@ class DriverEdit extends React.Component {
                         <img src='{driver.photos.photo1}'/>
                         <img src='{driver.photos.photo2}' />
                         <img src='{driver.photos.photo3' /> */}
+                        {/* need function for cancel */}
                         <Button cancel /><br></br>
-                        <Button delete /><br></br>
-                        <Button default /><br></br>
+                        <Button delete onClick={this.handleDelete}/><br></br>
+                        <Button default onClick={this.handleUpdateDriver}/><br></br>
                     </Form>
                 </div>
             </Container>
@@ -82,7 +97,16 @@ class DriverEdit extends React.Component {
     }
 }
 
-//mapStateToProps
-//export default connect
+const mapStateToProps = state => {
+    return {
+        updatingDriver: state.driverReducer.updatingDriver,
+        updatingBio: state.driverReducer.updatingBio,
+        deletingDriver: state.driverReducer.deletingBio
+    }
+}
 
-export default DriverEdit;
+
+export default connect(
+    mapStateToProps,
+    { deleteDriver, updateDriver, updateBio }
+)(DriverEdit)

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 
 export class Container extends Component {
   state = {
@@ -66,9 +67,10 @@ export class Container extends Component {
 const GoBack = () => {
   const style = {
     position: 'absolute',
-    top: '3vh',
+    top: '2vh',
     left: '2vh',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    fontFamily: 'Source Sans Pro'
   }
 
   return (
@@ -96,12 +98,16 @@ const Hamburger = props => {
     margin: '4px 0'
   })
 
+  const x = {
+    color: '#4f6d7a',
+  }
+
   return (
     <div 
       style = { container }
       onClick = { () => props.open() }
     >
-      { props.isOpen ? "X" :
+      { props.isOpen ? <p style={x}>X</p> :
         <>
         <div style = { line(props.blue) }></div>
         <div style = { line(props.blue) }></div>
@@ -118,16 +124,35 @@ const Menu = props => {
     width: '25vw',
     height: '100vh',
     right: open ? '0' : '-25vw',
-    background: '#4f6d7a',
-    borderLeft: '2px solid white',
-    transition: 'right 1s ease'
+    background: '#ffffff',
+    borderLeft: '1px solid white',
+    transition: 'right 1s ease',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    padding: '50px 0'
   })
+
+  const style = {
+    fontSize: '25px',
+    textDecoration: 'none',
+    fontFamily: 'Source Sans Pro',
+    textAlign: 'center',
+    color: '#4f6d7a',
+    background: 'none',
+    border: 'none',
+    fontWeight: '600',
+
+  }
 
   return (
     <div
       style = { container(props.open) }
     >
-      temp
+      <NavLink to='' style= { style }>My Account</NavLink>
+      <NavLink to='' style= { style }>My Profile</NavLink>
+      <NavLink to='' style= { style }>About</NavLink>
+      <button style= { style }>Log Out</button>
     </div>
   )
 }
@@ -139,8 +164,10 @@ export const Button = props => {
     border: props.cancel ? '1px solid #707070' : 'none',
     borderRadius: '5px',
     padding: '10px 25px',
+    margin: '10px 0',
     cursor: 'pointer',
     textAlign: 'center',
+    fontSize: '14px',
     ...obj
   })
 

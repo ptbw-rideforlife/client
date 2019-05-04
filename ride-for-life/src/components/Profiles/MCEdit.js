@@ -1,9 +1,18 @@
 import React from 'react';
 import { Container, Text, Button } from '../../simple-library';
+import { updateMC, deleteMC } from '../../actions/mc-actions';
 
 class MCEdit extends React.Component {
     handleInputChange = event => {
         this.setState({ [event.target.name]: event.target.value})
+    }
+
+    handleUpdate = event => {
+        this.props.updateMC()
+    }
+
+    handleDelete = event => {
+        this.props.deleteMC()
     }
 
     editForm = {
@@ -30,16 +39,24 @@ class MCEdit extends React.Component {
                         placeholder='Re-enter New Password' 
                         onChange={this.handleInputChange}
                         /><br></br>
+                    {/* need cancel functionality */}
                     <Button cancel /><br></br>
-                    <Button delete /><br></br>
-                    <Button default /><br></br>
+                    <Button delete onClick={this.handleDelete}/><br></br>
+                    <Button default onClick={this.handleUpdate}/><br></br>
                 </Form>
             </Container>
         )
     } 
 }
 
-//mapStateToProps
-//export default connect
+const mapStateToProps = state => {
+    return {
+        updatingMC: state.mcReducer.updatingMC,
+        deletingMC: state.mcReducer.deletingMC
+    }
+}
 
-export default MCEdit;
+export default connect(
+    mapStateToProps, 
+    { updateMC, deleteMC }
+)(MCEdit)

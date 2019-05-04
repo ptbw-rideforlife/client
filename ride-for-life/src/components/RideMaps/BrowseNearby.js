@@ -1,27 +1,22 @@
 import React from 'react';
 import { Container, Form, Text, Button } from '../../simple-library';
 import Map from './Map';
+import { NearbyDrivers } from './MapComponents'
 
-export default function BrowseNearby() {
-  return (
-    <Container
-      blue
-    >
-      <Map 
-        width = { "100vw" }
-        height = { "50vh" }
-      />
-      <Form style = { location }>
-        <Text 
-          placeholder="Your Location"
-          width = { "60%" }
+export class BrowseNearby extends React.Component {
+  render( {
+    return (
+      <Container
+        blue
+      >
+        <Map 
+          width = { "100vw" }
+          height = { "50vh" }
         />
-        <Button submit />
-      </Form>
-      <div style = {{margin: '10px'}}>Browse All Drivers:</div>
-      <div style = {{margin: '10px', color: 'black'}}>-- RENDERED DRIVERS--</div>
-    </Container>
-  )
+        <NearbyDrivers />
+      </Container>
+    )
+  })
 }
 
 const location = {

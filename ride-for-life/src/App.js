@@ -5,13 +5,23 @@ import Homepage from './components/Homepage/Homepage';
 import Login from './components/Login/Login';
 import SignUp from './components/Signup/SignUp';
 import SignUpForm from './components/Signup/SignUpForm';
-import Rider from './components/UserPages/Rider';
+import GetUser from './components/UserPages/GetUser';
+import Map from './components/RideMaps/Map';
 import Timer from './components/RideMaps/Timer';
 import PrivateRoute from './components/Login/PrivateRoute';
+import About from './components/About/About'
+import Drivers from './components/Drivers/Drivers';
+import DriverPrevious from './components/PreviousTrips/DriverPrevious'
+import MCPrevious from './components/PreviousTrips/MCPrevious'
+import AddReview from './components/Reviews/AddReview'
+import Reviews from './components/Reviews';
+import DriverProfile from './components/Drivers/DriverProfile';
 
 class App extends Component {
   state = {
-    mobile: false
+    mobile: false,
+    acctPath: '',
+    type: null
   }
 
   componentDidMount() {
@@ -34,7 +44,13 @@ class App extends Component {
     flexDirection: 'column'
   }
 
-  
+  goToProfile = profile => {
+    this.props.history.push(`/${profile == ''}`)
+  }
+
+  setPath = (type, id) => {
+    this.setState({ acctPath: `${type}/${id}` })
+  }
 
   render() {
     return (
@@ -42,25 +58,80 @@ class App extends Component {
         <Route path="/" exact render = { props => (
           <Homepage 
             { ...props }
-            // openForm = { this.openForm }
             mobile = { this.state.mobile }
           />
         ) } />
         <Route path="/login" exact render = { props => (
           <Login
             {...props}
-            mobile = { this.state.mobile } />
+            mobile = { this.state.mobile }
+            getUser = { this.getUser }
+          />
         )
         }/>
-        <Route path="/signup" exact component = { SignUp } />
+        <Route path="/signup" exact render = { props => (
+          <SignUp 
+            { ...props }
+            mobile = { this.state.mobile } />
+        )} />
         <Route path="/signup/:form" exact render = { props => (
           <SignUpForm 
             { ...props }
             mobile = {this.state.mobile}
           />
         )} />
-        <Route path="/users/" exact component = { Rider } />
+        <Route path='/driver/:id/previous' exact render = { props => (
+            <DriverPrevious 
+              {...props}
+              mobile={this.state.mobile} />
+        )} />
+        <Route path='/users/:id/previous' exact render = { props => (
+            <MCPrevious
+              {...props}
+              mobile={this.state.mobile} />
+        )} />
+        <PrivateRoute path="/users/:id" exact component = { props => ( 
+          <GetUser 
+            isUser
+            { ...props }
+            mobile = {this.state.mobile}
+          /> 
+        )} />
+        <PrivateRoute path="/drivers" exact component = { props => (
+          <Drivers 
+            { ...props }
+            mobile = { this.state.mobile }
+          />
+        )} />
+        <Route path="/drivers/:id" exact component = { props => (
+          <DriverProfile 
+            { ...props }
+            mobile = { this.state.mobile }
+          />
+        )} />
+        <PrivateRoute path="/driver/:id" exact component = { props => (
+          <GetUser 
+            isDriver
+            { ...props }
+            mobile = {this.state.mobile}
+          />
+        )} />
+        <PrivateRoute path="/map" exact component = { props => (
+          <Map 
+            { ...props }
+          /> 
+        )} />
         <Route path = "/timer-test" exact component = { Timer } />
+        <Route path='/about' exact render = { props => (
+          <About 
+            {...props}
+            mobile={this.state.mobile} />
+        )} />
+        <Route path='/add-review' exact render = { props => (
+          <AddReview 
+            {...props}
+            mobile={this.state.mobile} />
+        )} />
       </Router>
     )
   } 

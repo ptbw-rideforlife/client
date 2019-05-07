@@ -17,8 +17,6 @@ class Homepage extends Component {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: '100vw 100vh'
   }
 
   signUpTop = {
@@ -121,11 +119,11 @@ class Homepage extends Component {
           </MobileTop>
           <div  style={this.mobileHeader}><Header>Welcome to the New Standard of Care</Header></div>
           <div style={this.mobileButtons}>
-            <MobileButton
-                style = { mainBtn }
-              >
+            <Link to='/about'>
+              <MobileButton
+                style = { mainBtn }>
                 Learn More
-              </MobileButton>
+              </MobileButton></Link>
               <Link to = "/signup">
                 <MobileButton
                   style = { mainBtn }
@@ -189,11 +187,13 @@ class Homepage extends Component {
             <Header>Welcome to the New Standard of Care</Header>
           </div>
           <MainButtons>
-            <Button
-              style = { mainBtn }
-            >
-              Learn More
-            </Button>
+            <Link to='/about'>
+              <Button
+                style = { mainBtn }
+              >
+                Learn More
+              </Button>
+            </Link>
             <Link to = "/signup">
               <Button
                 style = { mainBtn }
@@ -285,7 +285,8 @@ const mainBtn = {
   height: '60px',
   fontSize: '17px',
   fontWeight: '600',
-  margin: '30px'
+  margin: '30px',
+  cursor: 'pointer'
 }
 
 export default Homepage;

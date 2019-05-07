@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Text, Form } from '../../simple-library'
 
 export const RequestRide = () => {
-    requestContainer = {
+    const requestContainer = {
         height: '175px',
         width: '300px',
         backgroundColor: '#4f6d7a',
@@ -10,16 +10,16 @@ export const RequestRide = () => {
         borderRadius: '10px'
     }
 
-    estimated = {
+    const estimated = {
         padding: '20px 0 0 20px'
     }
 
     return (
-        <div style={this.requestContainer}>
+        <div style={requestContainer}>
         {/* //placeholder - estimated pickup time */}
-            <p style={this.estimated}>Estimated Pickup Time: 6 minutes</p> 
+            <p style={estimated}>Estimated Pickup Time: 6 minutes</p> 
         {/* placeholder - estimated cost  */}
-            <p style={this.estimated}>Estimated Cost: $4.72</p>
+            <p style={estimated}>Estimated Cost: $4.72</p>
             <Button>Request Ride</Button>
         </div>
     );
@@ -89,7 +89,7 @@ export class HowLong extends React.Component {
 };
 
 export const Searching = () => {
-    searching = {
+    const searching = {
         width: '500px',
         height: '120px',
         borderRadius: '10px',
@@ -107,7 +107,7 @@ export const Searching = () => {
 };
 
 export const Accepted = props => { //does cancel require state? does this need to be a class component?
-    acceptedContainer = {
+    const acceptedContainer = {
         width: '100%',
         height: '180px',
         backgroundColor: '#f5f5f5',
@@ -120,7 +120,7 @@ export const Accepted = props => { //does cancel require state? does this need t
         color: '#707070'
     }
 
-    section = {
+    const section = {
         width: '25%'
     }
 
@@ -165,7 +165,7 @@ export class NearbyDrivers extends React.Component {
         textAlign: 'left',
     }
 
-    const nearbyDriver = {
+    nearbyDriver = {
         display: 'flex',
         justifyContent: 'space-between',
         border: '2px solid #e89980',
@@ -189,10 +189,10 @@ export class NearbyDrivers extends React.Component {
                 </Form>
                 <div style={this.nearbyDrivers}>
                     <h3>Nearby Drivers:</h3>
-                    {props.drivers.nearby.map(driver => {
+                    {this.props.drivers.nearby.map(driver => {
                         return (
                             <div style={this.nearbyDriver}>
-                                <h4>{props.driver.firstName} {props.driver.lastName}</h4>
+                                <h4>{this.props.driver.firstName} {this.props.driver.lastName}</h4>
                                 {/* placeholder - nearby mileage? */}
                                 <p>1.2 miles away</p>
                             </div>
@@ -205,7 +205,7 @@ export class NearbyDrivers extends React.Component {
 };
 
 export const NoneNearby = () => {
-    noneContainer = {
+    const noneContainer = {
         width: '500px',
         height: '120px',
         borderRadius: '10px',
@@ -271,13 +271,13 @@ export class BrowseAll extends React.Component {
                 </div>
                 <div style={this.browseAll}>
                     <h3>Browse All Drivers:</h3>
-                    {props.drivers.map(driver => {
+                    {this.props.drivers.map(driver => {
                         return (
-                            <div style={browseDriver}>
+                            <div style={this.browseDriver}>
                                 {/* <img src='' alt='driver' /> */}
-                                <h4>{props.drivers.driver.name}</h4>
-                                <p>{props.drivers.driver.address}</h4>
-                                <p>{props.drivers.driver.averageRating}</p>
+                                <h4>{this.props.drivers.driver.name}</h4>
+                                <p>{this.props.drivers.driver.address}</p>
+                                <p>{this.props.drivers.driver.averageRating}</p>
                             </div>
                         )
                     })}

@@ -1,31 +1,31 @@
 import {
-  ADD_START, 
-  ADD_SUCCESS, 
-  ADD_FAILED
+  UPDATE_START, 
+  UPDATE_SUCCESS, 
+  UPDATE_FAILED
 } from '../actions';
 
 
 const initialState = {
-  adding: false,
+  updating: false,
   id: null,
   error: null
 }
 
-export const addReducer = (state = initialState, action) => {
+export const updateReducer = (state = initialState, action) => {
   switch(action.type) {
-    case ADD_START:
-    console.log('add_start')
+    case UPDATE_START:
+    console.log('UPDATE_start')
       return {
         ...state,
       }
-    case ADD_SUCCESS:
+    case UPDATE_SUCCESS:
     console.log(action.payload)
       return {
         ...state,
         id: action.payload
       }
-    case ADD_FAILED:
-    console.log('add_failed')
+    case UPDATE_FAILED:
+    console.log('UPDATE_failed')
       return {
         ...state,
       }

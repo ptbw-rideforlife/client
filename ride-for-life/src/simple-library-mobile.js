@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+// import Menu from './Menu';
 
 export class MobileContainer extends Component {
   state = {
@@ -10,6 +11,9 @@ export class MobileContainer extends Component {
     height: this.props.map ? '0' : '100vh',
     width: '100vw',
     background: this.props.blue ? '#4f6d7a' : this.props.home ? `url(${this.props.img})` : this.props.map ? 'none' : '#f5f5f5',
+    backgroundRepeat: this.props.home ? 'no-repeat' : null,
+    backgroundSize: this.props.home ? 'cover' : null,
+    backgroundPosition: this.props.home ? 'center' : null,
     color: this.props.blue ? '#ffffff' : '#707070',
     position: 'absolute',
     top: '0',
@@ -40,7 +44,8 @@ export class MobileContainer extends Component {
           { ...this.props }
           style = { this.container(this.props.style) }
         >
-          <MobileGoBack />
+          <MobileGoBack 
+            about = {this.props.about}/>
           { this.props.children }
         </div>
       )
@@ -50,14 +55,17 @@ export class MobileContainer extends Component {
           { ...this.props }
           style = { this.container(this.props.style) }
         >
-          <MobileGoBack />
+          <MobileGoBack 
+            about={this.props.about}/>
           <MobileHamburger 
             blue = { this.props.blue }
             open = { this.open }
             isOpen = { this.state.open }
+            about={this.props.about}
           />
           <MobileMenu 
             open = { this.state.open }
+            { ...this.props }
           />
           { this.props.children }
         </div>
@@ -66,23 +74,53 @@ export class MobileContainer extends Component {
   }
 }
 
-const MobileGoBack = () => {
-    const style = {
-      position: 'absolute',
-      top: '2vh',
-      left: '2vh',
-      cursor: 'pointer',
-      fontFamily: 'Source Sans Pro'
-    }
-  
+const MobileGoBack = props => {
+  const style = (about, blue)  => ({
+    position: 'absolute',
+    top: '2vh',
+    left: '2vh',
+    cursor: 'pointer',
+    fontFamily: 'Source Sans Pro',
+    color: about ? '#fff' : blue ? '#fff' : null,
+    textShadow: about ? '0px 3px 6px #4f6d7a, 0px -3px 6px #4f6d7a, 3px 0px 6px #4f6d7a, -3px 0px 6px #4f6d7a' : null,
+    zIndex: 10000,
+    border: 'none',
+    background: 'none',
+    fontSize: '15px'
+  })
+
+  const goBack = () => {
+    window.history.back();
+  }
+
+  if(props.about) {
     return (
-      <span
-        style = { style }
-      >
-         &lt; go back
-      </span>
+      <button
+        style = { style(props.about) }
+        onClick = {() => goBack()} >
+        &lt; go back
+      </button> 
+    )
+  } else if(props.blue) {
+    return (
+      <button
+        style = { style(props.blue) }
+        onClick = {() => goBack()} >
+        &lt; go back
+      </button>
     );
   }
+
+  else {
+    return (
+      <button
+        style={style(style)}
+        onClick={() => goBack()} >
+        &lt; go back
+      </button>
+    )
+  }
+}
   
   const MobileHamburger = props => {
     const container = {
@@ -96,7 +134,7 @@ const MobileGoBack = () => {
     const line = blue => ({
       width: '15px',
       height: '2px',
-      background: blue ? '#fff' : '#707070',
+      background: blue ? '#fff' : props.about ? '#fff' : '#707070',
       margin: '4px 0'
     })
   
@@ -120,8 +158,8 @@ const MobileGoBack = () => {
     )
   }
   
-  const MobileMenu = props => {
-    const container = open => ({
+  class MobileMenu extends Component {
+    container = open => ({
       position: 'absolute',
       width: '100vw',
       height: '100vh',
@@ -134,7 +172,7 @@ const MobileGoBack = () => {
       padding: '30px 0'
     })
   
-    const style = {
+    style = {
       fontSize: '25px',
       textDecoration: 'none',
       fontFamily: 'Source Sans Pro',
@@ -143,19 +181,28 @@ const MobileGoBack = () => {
       background: 'none',
       border: 'none',
       fontWeight: '600',
-  
+    }
+
+    goToAccount = () => {
+      this.props.history.push(localStorage.getItem('acctPath'))
     }
   
-    return (
-      <div
-        style = { container(props.open) }
-      >
-        <NavLink to='' style= { style }>My Account</NavLink>
-        <NavLink to='' style= { style }>My Profile</NavLink>
-        <NavLink to='' style= { style }>About</NavLink>
-        <button style= { style }>Log Out</button>
-      </div>
-    )
+    render() {
+      return (
+        <div
+          style = { this.container(this.props.open) }
+        >
+          <div 
+            style= { this.style }
+            onClick = { () => this.goToAccount() }
+          >
+              My Account
+          </div>
+          <NavLink to='' style= { this.style }>About</NavLink>
+          <button style= { this.style }>Log Out</button>
+        </div>
+      )
+    }
   }
   
   export const MobileButton = props => {
@@ -266,9 +313,10 @@ const MobileGoBack = () => {
   export const MobilePrevious = props => {
     const style = obj => ({
       ...obj, 
-      width: '75vw',
-      height: props.height,
+      width: '90%',
+      height: '60px',
       border: '2px solid #e89980',
+      margin: '10px 0',
       borderRadius: '5px',
       color: '#707070',
       display: 'flex',

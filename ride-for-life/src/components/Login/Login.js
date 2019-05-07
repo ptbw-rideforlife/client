@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom'
 
-import { userLogin } from '../../actions';
+import { login } from '../../actions';
 import { Container, Text, Column, Form, Button } from '../../simple-library';
 import { MobileContainer, MobileForm, MobileButton } from '../../simple-library-mobile'
 
 class Login extends Component {
   // state
   state = {
+    isUser: true,
     credentials: {
       phoneNumber: '',
       password: ''
@@ -66,11 +68,25 @@ class Login extends Component {
     justifyContent: 'center'
   }
 
+  link = {
+    textDecoration: 'none',
+    color: '#e89980',
+    cursor: 'pointer'
+  }
+
   // methods
-  login = event => {    
+  login = event => {
     event.preventDefault();
-    this.props.userLogin(this.state.credentials)
-      .then(() => this.props.history.push('/test'))
+    if(this.state.isUser) {
+      this.props.login(this.state.credentials, 'users')
+        .then(() => localStorage.setItem('user', this.props.id))
+        .then(() => localStorage.setItem('acctPath', `/users/${this.props.id}`))
+        .then(() => this.props.history.push(`/users/${this.props.id}`))
+    } else {
+      this.props.login(this.state.credentials, 'driver')
+        .then(() => localStorage.setItem('acctPath', `/driver/${this.props.id}`))
+        .then(() => this.props.history.push(`/driver/${this.props.id}`))
+    }
   }
 
   handleChange = event => {
@@ -93,14 +109,15 @@ class Login extends Component {
       else {  
         return (
           <MobileContainer
-            blue>
+            login
+          >
             <div style={this.mobileContainer}>
                 <h2 style={this.headerMobile}>Log In</h2>
-                <p style={this.under}>Don't have an account? Sign up.</p>
+                <p style={this.under}>Don't have an account? Sign up <Link to='/signup' style={this.link}>here</Link>.</p>
                 <MobileForm onSubmit = {this.login} style={this.mobileLogin}>
                   <Text 
                     name="phoneNumber"
-                    type="number"
+                    type="text"
                     value = { phoneNumber }
                     placeholder="Phone Number"
                     style = { this.input }
@@ -127,15 +144,25 @@ class Login extends Component {
     } else {
       return (
         <Container
-          blue
+          login
           style = { this.container }
         >
           <Column 
             style = { this.column }
           >
-            <h2 style={this.header}>Log In</h2>
-            <p style = { this.under }>Don't have an account? Sign up --LINK--</p>
-            <div></div>
+            { this.state.isUser ? 
+              <>
+                <h2 style={this.header}>Log In</h2>
+                <p style = { this.under }>Don't have an account? Sign up <Link to='/signup' style={this.link}>here</Link>.</p>
+                <div></div>
+              </>
+            :
+              <>
+                <h2 style = {this.header}>Driver Login</h2>
+                <div></div>
+                <div></div>
+              </>
+            }
           </Column>
           <Form
             onSubmit = { this.login }
@@ -148,7 +175,7 @@ class Login extends Component {
             >
               <Text 
                 name="phoneNumber"
-                type="number"
+                type="text"
                 value = { phoneNumber }
                 placeholder="Phone Number"
                 style = { this.input }
@@ -172,6 +199,21 @@ class Login extends Component {
               </Button>
             </Column>
           </Form>
+          { this.state.isUser ?
+            <div style={{
+              color: '#fff',
+              position: 'absolute',
+              bottom: '5px',
+              width: '100vw',
+              textAlign: 'center',
+              fontFamily: 'Source Sans Pro'
+            }}><span>Are you a Ride4Life Driver? Log in <span 
+            style={this.link}
+            onClick = { () => this.setState({ isUser: false }) }
+            >here</span>.</span></div>
+          :
+            null
+          }
         </Container>
       )
     }
@@ -179,7 +221,9 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
-  loggingIn: state.loginReducer.loggingIn
+  loggingIn: state.loginReducer.loggingIn,
+  id: state.loginReducer.id,
+  userType: state.loginReducer.userType
 })
 
-export default connect(mapStateToProps, { userLogin })(Login)
+export default connect(mapStateToProps, { login })(Login)

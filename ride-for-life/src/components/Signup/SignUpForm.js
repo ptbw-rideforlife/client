@@ -1,76 +1,59 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { add } from '../../actions';
-import { Container, Form, Column, Button, Text } from '../../simple-library';
+import { add, login } from '../../actions';
+import { Container, Form, Button, Text } from '../../simple-library';
 import { MobileContainer, MobileForm, MobileButton } from '../../simple-library-mobile'
 
 class SignUp extends Component {
   state = {
     formType: '',
-    defaultFields: {
-      firstName: '',
-      lastName: '',
-      phoneNumber: '',
-      address: '',
-      password: '',
-      passwordConfirm: ''
+    passwordConfirm: '',
+    mFields: {
+      mFirstName: '',
+      mLastName: '',
+      mPhoneNumber: '',
+      mAddress: '',
+      mPassword: '',
+    },
+    dFields: {
+      dFirstName: '',
+      dLastName: '',
+      dPhoneNumber: '',
+      dPrice: '',
+      dCity: '',
+      dPassword: ''
     },
     cgFields: {
       cgFirstName: '',
       cgLastName: '',
-      mFirstName: '',
-      mLastName: '',
+      moFirstName: '',
+      moLastName: '',
       phoneNumber: '',
       address: '',
       password: '',
-      passwordConfirm: ''
-    }
+    },
+    passwordMatch: true
   }
 
-  componentDidMount() {
-    const form = this.props.match.params.form;
-    this.setState({ formType: form })
-  }
+  mFields = [
+    "First Name",
+    "Last Name",
+    "Phone Number",
+    "Address",
+    "Enter Password",
+    "Re-Enter Password"
+  ]
 
-  defaultSubmit = event => {
-    event.preventDefault();
-    console.log(this.state)
-    if(this.state.formType === 'mother') {
-      console.log('start')
-      this.props.add(this.state.defaultFields, true)
-      .then(() => console.log('response received'))
-    } else if(this.state.formType === 'driver') {
-      console.log('start')
-      this.props.add(this.state.defaultFields, true)
-      .then(() => console.log('response received'))
-    }
-  }
-
-  defaultHandleChange = event => {
-    this.setState({
-      defaultFields: {
-        ...this.state.defaultFields,
-        [event.target.name]: event.target.value
-      }
-    })
-  }
-
-  cgSubmit = event => {
-    event.preventDefault();
-    console.log('start')
-      this.props.add(this.state.cgFields, false)
-      .then(() => console.log('response received'))
-  }
-
-  cgHandleChange = event => {
-    this.setState({
-      cgFields: {
-        ...this.state.cgFields,
-        [event.target.name]: event.target.value
-      }
-    })
-  }
+  dFields = [
+    "First Name",
+    "Last Name",
+    "Phone Number",
+    "Price",
+    "City",
+    "Password",
+    "Re-Enter Password"
+  ]
 
   cgFields = [
     "Caregiver First Name",
@@ -83,17 +66,131 @@ class SignUp extends Component {
     "Re-Enter Password"
   ]
 
-  fields = [
-    "First Name",
-    "Last Name",
-    "Phone Number",
-    "Address",
-    "Enter Password",
-    "Re-Enter Password"
-  ]
+  componentDidMount() {
+    const form = this.props.match.params.form;
+    this.setState({ formType: form })
+  }
 
-  header = {
-    paddingRight: '400px'
+  handleChange = event => {
+    if(event.target.name !== 'passwordConfirm') {
+      if(this.state.formType === 'mother') {
+        this.setState({
+          mFields: {
+            ...this.state.mFields,
+            [event.target.name]: event.target.value
+          }
+        })
+      } else if(this.state.formType === 'driver') {
+        this.setState({
+          dFields: {
+            ...this.state.dFields,
+            [event.target.name]: event.target.value
+          }
+        })
+      } else {
+        this.setState({
+          cgFields: {
+            ...this.state.cgFields,
+            [event.target.name]: event.target.value
+          }
+        })
+      }
+    } else {
+      this.setState({ [event.target.name]: event.target.value })
+    }
+  }
+
+  submit = event => {
+    event.preventDefault();
+
+    if(this.state.formType === 'mother') {
+      const { 
+        mFirstName, 
+        mLastName, 
+        mAddress, 
+        mPhoneNumber, 
+        mPassword 
+      } = this.state.mFields;
+
+      const profile = {
+        firstName: mFirstName,
+        lastName: mLastName,
+        address: mAddress,
+        phoneNumber: mPhoneNumber,
+        password: mPassword
+      }
+
+      this.props.add(profile, true)
+      .then(() => {
+        const creds = {
+          phoneNumber: mPhoneNumber,
+          password: mPassword
+        }
+        return this.props.login(creds, 'users')
+      })
+      .then(() => localStorage.setItem('user', this.props.id))
+      .then(() => localStorage.setItem('acctPath', `/users/${this.props.id}`))
+      .then(() => this.props.history.push(`/users/${this.props.id}`))
+
+    } else if(this.state.formType === 'driver') {
+      const { 
+        dFirstName, 
+        dLastName, 
+        dPhoneNumber, 
+        dPrice, 
+        dCity, 
+        dPassword 
+      } = this.state.dFields;
+
+      const profile = {
+        firstName: dFirstName,
+        lastName: dLastName,
+        phoneNumber: Number(dPhoneNumber),
+        price: Number(dPrice),
+        city: dCity,
+        password: dPassword
+      }
+
+      this.props.add(profile, false)
+      .then(() => {
+        const creds = {
+          phoneNumber: dPhoneNumber,
+          password: dPassword
+        }
+        return this.props.login(creds, 'driver')
+      })
+      .then(() => localStorage.setItem('acctPath', `/driver/${this.props.id}`))
+      .then(() => this.props.history.push(`/driver/${this.props.id}`))
+
+    } else {
+      const {
+        cgFirstName,
+        cgLastName,
+        cgAddress,
+        cgPhoneNumber,
+        cgPassword
+      } = this.state.cgFields
+
+      const profile = {
+        firstName: cgFirstName,
+        lastName: cgLastName,
+        address: cgAddress,
+        phoneNumber: cgPhoneNumber,
+        password: cgPassword
+      }
+
+      this.props.add(profile, true)
+      .then(() => {
+        const creds = {
+          phoneNumber: cgPhoneNumber,
+          password: cgPassword
+        }
+        return this.props.login(creds, 'users')
+      })
+      .then(() => localStorage.setItem('user', this.props.id))
+      .then(() => localStorage.setItem('acctPath', `/users/${this.props.id}`))
+      .then(() => this.props.history.push(`/users/${this.props.id}`))
+    }
   }
 
   input = {
@@ -118,128 +215,209 @@ class SignUp extends Component {
   }
 
   signUpContainer = {
-    height: '1200px'
+    height: '900px'
   }
 
   render() {
-    const { firstName, lastName, phoneNumber, address, password, passwordConfirm } = this.state.defaultFields;
-    const { cgFirstName, cgLastName, mFirstName, mLastName, cgPhoneNumber, cgAddress, cgPassword, cgPasswordConfirm } = this.state.cgFields;
+    const { 
+      mFirstName, 
+      mLastName, 
+      mPhoneNumber, 
+      mAddress, 
+      mPassword 
+    } = this.state.mFields;
+
+    const {
+      dFirstName,
+      dLastName,
+      dPhoneNumber,
+      dPrice,
+      dCity,
+      dPassword
+    } = this.state.dFields
+
+    const { 
+      cgFirstName, 
+      cgLastName, 
+      moFirstName, 
+      moLastName, 
+      cgPhoneNumber, 
+      cgAddress, 
+      cgPassword, 
+      cgPasswordConfirm 
+    } = this.state.cgFields;
+
+    const { passwordConfirm } = this.state;
+
     if(this.props.mobile) {
       return (
-        <MobileContainer style={this.signUpContainer}>
+        <MobileContainer 
+          style={this.signUpContainer}
+          { ...this.props }
+        >
             <h2 style={this.signUpHeader}>Sign Up as a { this.state.formType.split('').map((a, i) => i === 0 ? a.toUpperCase() : a).join('') }</h2>
             <MobileForm
               style = { this.formMobile }
               onSubmit = { this.state.formType === 'caregiver' ? event => this.cgSubmit(event) : event => this.defaultSubmit(event) } >
-                { this.state.formType == 'mother' || this.state.formType == 'driver' ? 
-              this.fields.map((field, index) => (
-                <Text 
-                  placeholder = { field }
-                  style = { this.input }
-                  name = { 
-                    index === 0 ? 'firstName' :
-                    index === 1 ? 'lastName' :
-                    index === 2 ? 'phoneNumber' :
-                    index === 3 ? 'address' :
-                    index === 4 ? 'password' :
-                    'passwordConfirm' 
-                  }
-                  value = {
-                    index === 0 ? firstName :
-                    index === 1 ? lastName :
-                    index === 2 ? phoneNumber :
-                    index === 3 ? address :
-                    index === 4 ? password :
-                    passwordConfirm
-                  }
-                  onChange = { event => this.defaultHandleChange(event) }
-                />
-              ))
-            :
-              this.cgFields.map((field, index) => (
-                <Text 
-                  placeholder = { field }
-                  style = { this.input }
-                  name = {
-                    index === 0 ? 'cgFirstName' :
-                    index === 1 ? 'cgLastName' :
-                    index === 2 ? 'mFirstName' :
-                    index === 3 ? 'mLastName' :
-                    index === 4 ? 'cgPhoneNumber' :
-                    index === 5 ? 'cgAddress' :
-                    index === 6 ? 'cgPassword' :
-                    'cgPasswordConfirm'
-                  }
-                  value = {
-                    index === 0 ? cgFirstName :
-                    index === 1 ? cgLastName :
-                    index === 2 ? mFirstName :
-                    index === 3 ? mLastName :
-                    index === 4 ? cgPhoneNumber :
-                    index === 5 ? cgAddress :
-                    index === 6 ? cgPassword :
-                    cgPasswordConfirm
-                  }
-                  onChange = { event => this.cgHandleChange(event) }
-                />
-              ))
-          }
-                <MobileButton submit/>
+                { this.state.formType == 'mother' ? 
+                  this.mFields.map((field, index) => (
+                    <Text 
+                      placeholder = { field }
+                      style = { this.input }
+                      name = { 
+                        index === 0 ? 'mFirstName' :
+                        index === 1 ? 'mLastName' :
+                        index === 2 ? 'mPhoneNumber' :
+                        index === 3 ? 'mAddress' :
+                        index === 4 ? 'mPassword' :
+                        'passwordConfirm' 
+                      }
+                      value = {
+                        index === 0 ? mFirstName :
+                        index === 1 ? mLastName :
+                        index === 2 ? mPhoneNumber :
+                        index === 3 ? mAddress :
+                        index === 4 ? mPassword :
+                        passwordConfirm
+                      }
+                      onChange = { event => this.defaultHandleChange(event) }
+                    />
+                  ))
+                : this.state.formType === 'driver' ?
+                  this.dFields.map((field, index) => (
+                    <Text 
+                      placeholder = { field }
+                      style = { this.input }
+                      name = { 
+                        index === 0 ? 'dFirstName' :
+                        index === 1 ? 'dLastName' :
+                        index === 2 ? 'dPhoneNumber' :
+                        index === 3 ? 'dPrice' :
+                        index === 4 ? 'dCity' :
+                        index === 5 ? 'dPassword' :
+                        'passwordConfirm' 
+                      }
+                      value = {
+                        index === 0 ? dFirstName :
+                        index === 1 ? dLastName :
+                        index === 2 ? dPhoneNumber :
+                        index === 3 ? dPrice :
+                        index === 4 ? dCity :
+                        index === 5 ? dPassword :
+                        passwordConfirm
+                      }
+                      onChange = { event => this.handleChange(event) }
+                    />
+                  ))
+                  : this.cgFields.map((field, index) => (
+                    <Text 
+                      placeholder = { field }
+                      style = { this.input }
+                      name = {
+                        index === 0 ? 'cgFirstName' :
+                        index === 1 ? 'cgLastName' :
+                        index === 2 ? 'mFirstName' :
+                        index === 3 ? 'mLastName' :
+                        index === 4 ? 'cgPhoneNumber' :
+                        index === 5 ? 'cgAddress' :
+                        index === 6 ? 'cgPassword' :
+                        'cgPasswordConfirm'
+                      }
+                      value = {
+                        index === 0 ? cgFirstName :
+                        index === 1 ? cgLastName :
+                        index === 2 ? moFirstName :
+                        index === 3 ? moLastName :
+                        index === 4 ? cgPhoneNumber :
+                        index === 5 ? cgAddress :
+                        index === 6 ? cgPassword :
+                        passwordConfirm
+                      }
+                      onChange = { event => this.cgHandleChange(event) }
+                    />
+                  ))
+                }
+              <MobileButton submit/>
             </MobileForm>
         </MobileContainer>
       )
-    }
-    else return (
+    } else return (
       <Container 
         gray
         style = {{
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'space-evenly'
         }}
+        { ...this.props }
       >
-        <h2 style={ this.header }>Sign up as a { this.state.formType.split('').map((a, i) => i === 0 ? a.toUpperCase() : a).join('') }</h2>
+        <h2>Sign up as a { this.state.formType.split('').map((a, i) => i === 0 ? a.toUpperCase() : a).join('') }</h2>
         <Form 
           style = {{
             display: 'flex',
             flexDirection: 'column'
           }}
-          onSubmit = { this.state.formType === 'caregiver' ? event => this.cgSubmit(event) : event => this.defaultSubmit(event) }
+          onSubmit = { event => this.submit(event) }
         >
-          { this.state.formType == 'mother' || this.state.formType == 'driver' ? 
-              this.fields.map((field, index) => (
+          { this.state.formType == 'mother' ? 
+              this.mFields.map((field, index) => (
                 <Text 
                   placeholder = { field }
                   style = { this.input }
                   name = { 
-                    index === 0 ? 'firstName' :
-                    index === 1 ? 'lastName' :
-                    index === 2 ? 'phoneNumber' :
-                    index === 3 ? 'address' :
-                    index === 4 ? 'password' :
+                    index === 0 ? 'mFirstName' :
+                    index === 1 ? 'mLastName' :
+                    index === 2 ? 'mPhoneNumber' :
+                    index === 3 ? 'mAddress' :
+                    index === 4 ? 'mPassword' :
                     'passwordConfirm' 
                   }
                   value = {
-                    index === 0 ? firstName :
-                    index === 1 ? lastName :
-                    index === 2 ? phoneNumber :
-                    index === 3 ? address :
-                    index === 4 ? password :
+                    index === 0 ? mFirstName :
+                    index === 1 ? mLastName :
+                    index === 2 ? mPhoneNumber :
+                    index === 3 ? mAddress :
+                    index === 4 ? mPassword :
                     passwordConfirm
                   }
-                  onChange = { event => this.defaultHandleChange(event) }
+                  onChange = { event => this.handleChange(event) }
                 />
               ))
-            :
-              this.cgFields.map((field, index) => (
+            : this.state.formType === 'driver' ?
+              this.dFields.map((field, index) => (
+                <Text 
+                  placeholder = { field }
+                  style = { this.input }
+                  name = { 
+                    index === 0 ? 'dFirstName' :
+                    index === 1 ? 'dLastName' :
+                    index === 2 ? 'dPhoneNumber' :
+                    index === 3 ? 'dPrice' :
+                    index === 4 ? 'dCity' :
+                    index === 5 ? 'dPassword' :
+                    'passwordConfirm' 
+                  }
+                  value = {
+                    index === 0 ? dFirstName :
+                    index === 1 ? dLastName :
+                    index === 2 ? dPhoneNumber :
+                    index === 3 ? dPrice :
+                    index === 4 ? dCity :
+                    index === 5 ? dPassword :
+                    passwordConfirm
+                  }
+                  onChange = { event => this.handleChange(event) }
+                />
+              ))
+            : this.cgFields.map((field, index) => (
                 <Text 
                   placeholder = { field }
                   style = { this.input }
                   name = {
                     index === 0 ? 'cgFirstName' :
                     index === 1 ? 'cgLastName' :
-                    index === 2 ? 'mFirstName' :
-                    index === 3 ? 'mLastName' :
+                    index === 2 ? 'moFirstName' :
+                    index === 3 ? 'moLastName' :
                     index === 4 ? 'cgPhoneNumber' :
                     index === 5 ? 'cgAddress' :
                     index === 6 ? 'cgPassword' :
@@ -248,14 +426,14 @@ class SignUp extends Component {
                   value = {
                     index === 0 ? cgFirstName :
                     index === 1 ? cgLastName :
-                    index === 2 ? mFirstName :
-                    index === 3 ? mLastName :
+                    index === 2 ? moFirstName :
+                    index === 3 ? moLastName :
                     index === 4 ? cgPhoneNumber :
                     index === 5 ? cgAddress :
                     index === 6 ? cgPassword :
                     cgPasswordConfirm
                   }
-                  onChange = { event => this.cgHandleChange(event) }
+                  onChange = { event => this.handleChange(event) }
                 />
               ))
           }
@@ -268,6 +446,7 @@ class SignUp extends Component {
 
 const mapStateToProps = state => ({
   // adding: state.loginReducer.loggingIn
+  id: state.addReducer.id,
 })
 
-export default connect(mapStateToProps, { add })(SignUp)
+export default connect(mapStateToProps, { add, login })(SignUp)

@@ -1,28 +1,39 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container, Column, Previous, Button, Form, Text } from '../../simple-library';
-import { MobileContainer, MobilePrevious } from '../../simple-library-mobile'
 
 import { getReviews, get, update, addReview } from '../../actions';
 
 class DriverProfile extends Component {
     state = {
-        id: null,
-        userId: null,
-        editReview: false,
-        prevReview: null,
-        editText: '',
-        newReview: '',
+        addReview: '',
         addReviewOpen: false,
-        addReview: ''
+        editReview: false,
+        editText: '',
+        id: null,
+        newReview: '',
+        prevReview: null,
+        userId: null
     }
 
+//Functions
     componentDidMount() {
         this.props.getReviews();
         const userId = localStorage.getItem('user');
         const id = this.props.match.params.id;
         this.props.get(id, 'driver');
         this.setState({ id: id, userId: Number(userId) })
+    }
+
+    addReview = event => {
+        event.preventDefault();
+        const review = {
+            userID: this.state.userId,
+            driverID: this.state.id,
+            review: this.state.addReview
+        }
+        this.props.addReview(review)
+        .then(() => window.location.reload())
     }
 
     handleChange = event => {
@@ -40,41 +51,23 @@ class DriverProfile extends Component {
         .then(() => window.location.reload())
     }
 
-    addReview = event => {
-        event.preventDefault();
-        const review = {
-            userID: this.state.userId,
-            driverID: this.state.id,
-            review: this.state.addReview
-        }
-        this.props.addReview(review)
-        .then(() => window.location.reload())
-    }
-
-    bioStyle = {
-        border: '2px solid #707070',
-        borderRadius: '5px',
-        height: '30%',
-        width: '80%',
-        padding: '20px'
-    }
-
-    bioStyleMobile = {
-        border: '2px solid #707070',
-        borderRadius: '5px',
-        height: '20%',
-        width: '80%',
-        padding: '20px',
-        marginBottom: '20px'
-    }
-
+//Styles
     bioHeader = {
         textAlign: 'center',
         fontSize: '20px',
         paddingBottom: '15px',
         fontWeight: '600'
     }
-    
+
+    bioStyle = mobile => ({
+        border: '2px solid #707070',
+        borderRadius: '5px',
+        height: this.props.mobile ? '20%' : '30%',
+        width: '80%',
+        padding: '20px',
+        marginBottom: this.props.mobile ? '20px' : null
+    })
+
     driverNumbers = {
         backgroundColor: '#e89980',
         width: '80%',
@@ -89,33 +82,6 @@ class DriverProfile extends Component {
         fontFamily: 'Source Sans Pro'
     }
 
-    profileContainer = {
-        display: 'flex',
-        justifyContent: 'space-around',
-        flexDirection: 'row'
-    }
-
-    profileContainerMobile = {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
-    }
-
-    profileColumn = {
-        width: '40%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-around', 
-        marginTop: '100px',
-        alignItems: 'center'
-    }
-
-    driverStat = {
-        textAlign: 'center',
-        color: 'white',
-        width: '30%',
-    }
-
     driverPrice = {
         borderLeft: '2px solid #ffffff',
         borderRight: '2px solid #ffffff',
@@ -125,12 +91,10 @@ class DriverProfile extends Component {
         padding: '0 20px'
     }
 
-    reviews = {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'space-around'
+    driverStat = {
+        textAlign: 'center',
+        color: 'white',
+        width: '30%',
     }
 
     input = {
@@ -139,70 +103,47 @@ class DriverProfile extends Component {
         margin: '10px 0',
     }
 
-    render() { console.log(this.state)
-        if(this.props.mobile) {
-            return (
-                <MobileContainer style={this.profileContainerMobile}>
-                    <h2 style={{marginTop: '100px'}}> 
-                        { this.props.user.firstName } { this.props.user.lastName }
-                    </h2>
-                    <h2 style={{fontSize: '35px', marginBottom: '40px'}}>
-                        {this.props.user.city}, Uganda
-                    </h2>
-                    <div 
-                        style = { this.bioStyleMobile }
-                    >
-                        <h4 style={this.bioHeader}>About {this.props.user.firstName}</h4>
-                        <p>{this.props.user.bio}</p>                    
-                    </div>
-                    <div style={this.driverNumbers}>
-                        <div style={this.driverStat}>
-                            {this.props.user.trips} Trips
-                        </div>
-                        <div style={this.driverPrice}>
-                            ${this.props.user.price} Price per Mile
-                        </div>
-                        <div style={this.driverStat}>
-                            {this.props.user.averageRating} Average Rating
-                        </div>
-                    </div>
-                    <div style={this.reviews}>
-                    <h3 style={{fontSize: '30px', paddingBottom: '20px'}}>Reviews:</h3>
-                        { this.props.reviews.map(review => (
-                            review.driverID == this.state.id ?
-                                (
-                                    <MobilePrevious profile>
-                                        <p> { review.rating } </p>
-                                        <p> { review.review }</p>
-                                    </MobilePrevious>
-                                )
-                            :
-                                console.log(review)
-                        ))}
-                    </div>
-                </MobileContainer>
-            )
-        } 
-        else return (
-            <Container 
-                style = { this.profileContainer }
-                { ...this.props }
-            >
-                <Column 
-                    style = { this.profileColumn } 
-                >
+    profileColumn = mobile => ({
+        width: this.props.mobile ? '100%' : '40%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        marginTop: '100px',
+        alignItems: 'center'
+    })
+
+    profileContainer = mobile => ({
+        display: 'flex',
+        justifyContent: this.props.mobile ? null : 'space-around',
+        flexDirection: this.props.mobile ? 'column' : 'row',
+        alignItems: this.props.mobile ? 'center' : null
+    })
+
+    reviews = {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-around'
+    }
+
+    render() {
+      return (
+            <Container
+                style = { this.profileContainer(this.props.mobile) }
+                { ...this.props } >
+                <Column
+                    style = { this.profileColumn(this.props.mobile) } >
                     {/* <img src='${props.driver.photos.photo1}' /> */}
-                    <h2> 
+                    <h2>
                         { this.props.user.firstName } { this.props.user.lastName }
                     </h2>
                     <h2 style={{fontSize: '35px'}}>
                         {this.props.user.city}, Uganda
                     </h2>
-                    <div 
-                        style = { this.bioStyle }
-                    >
+                    <div style = { this.bioStyle(this.props.mobile) } >
                         <h4 style={this.bioHeader}>About {this.props.user.firstName}</h4>
-                        <p>{this.props.user.bio}</p>                    
+                        <p>{this.props.user.bio}</p>
                     </div>
                 </Column>
                 <Column style={this.profileColumn}>
@@ -218,16 +159,16 @@ class DriverProfile extends Component {
                         </div>
                     </div>
                     <div style={this.reviews}>
-                    { this.state.addReviewOpen ? 
-                        <Form 
+                    { this.state.addReviewOpen ?
+                        <Form
                             style = {{
-                                display: 'flex', 
-                                justifyContent: 'space-between', 
+                                display: 'flex',
+                                justifyContent: 'space-between',
                                 width: '100%'
                             }}
                             onSubmit = { event => this.addReview(event) }
                         >
-                            <Text 
+                            <Text
                                 placeholder = "Add Review"
                                 name="addReview"
                                 value = { this.state.addReview }
@@ -238,7 +179,7 @@ class DriverProfile extends Component {
                         </Form>
                     :
                         <div style = {{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
-                            <h3 
+                            <h3
                                 style={{fontSize: '30px', padding: '20px 0'}}
                             >
                                 Reviews:
@@ -246,22 +187,22 @@ class DriverProfile extends Component {
                             <Button onClick = { () => this.setState({ addReviewOpen: true }) }>Add Review</Button>
                         </div>
                     }
-                    { this.state.editReview ? 
+                    { this.state.editReview ?
                         this.props.reviews.map(review => (
                             review.driverID == this.state.id ?
                                 review.review == this.state.editText ?
                                 <Previous profile>
-                                    <Form 
+                                    <Form
                                         style = {{
-                                            display: 'flex', 
-                                            justifyContent: 'space-between', 
-                                            width: '100%', 
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            width: '100%',
                                             alignItems: 'center'
                                         }}
                                         onSubmit = { event => this.handleSubmit(event) }
                                     >
                                         <div></div>
-                                        <Text 
+                                        <Text
                                             placeholder = { review.review }
                                             name="newReview"
                                             value = { this.state.newReview }
@@ -290,7 +231,7 @@ class DriverProfile extends Component {
                                             <p> { review.rating } </p>
                                             <p> { review.review }</p>
                                             { review.userID === this.state.userId ?
-                                                <Button 
+                                                <Button
                                                     style = {{
                                                         display: 'flex',
                                                         justifyContent: 'center',
@@ -327,5 +268,5 @@ const mapStateToProps = state => {
       error
     }
   }
-  
+
   export default connect(mapStateToProps, { getReviews, get, update, addReview })(DriverProfile)

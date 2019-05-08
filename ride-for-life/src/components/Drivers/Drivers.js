@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import { Container } from '../../simple-library';
 import DriverCard from './DriverCard';
 import { getDrivers } from '../../actions';
-import { MobileContainer } from '../../simple-library-mobile'
+
 
 class Drivers extends Component {
+//Functions
   componentDidMount() {
     this.props.getDrivers();
   }
@@ -15,55 +16,31 @@ class Drivers extends Component {
     this.props.history.push(`/drivers/${id}`)
   }
 
+//Styles
+  container = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingTop: '100px'
+  }
+
+  drivers = mobile => ({
+    display: 'flex',
+    flexDirection: 'column',
+    flexWrap: this.props.mobile ? null : 'wrap',
+    paddingTop: '40px',
+    height: '70vh',
+    width: '100%',
+    alignItems: 'center'
+  })
+
   render() {
-    if (this.props.mobile) {
-      return (
-        <MobileContainer style = {{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          paddingTop: '100px', 
-        }}>
-          <h2 style={{
-            textAlign: 'center'
-          }}>Browse All Drivers:</h2>
-          <div style = {{
-          display: 'flex',
-          flexDirection: 'column',
-          paddingTop: '40px',
-          height: '70vh',
-          width: '100%',
-          alignItems: 'center'
-        }}>
-        { this.props.drivers.map(driver => (
-          <DriverCard 
-            driver = { driver }
-            goTo = { this.goTo }
-          />
-        )) }
-        </div>
-        </MobileContainer>
-      )
-    } else
     return (
-      <Container style = {{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        paddingTop: '100px', 
-      }}>
+      <Container style = {this.container}>
         <h2>Browse All Drivers:</h2>
-        <div style = {{
-          display: 'flex',
-          flexDirection: 'column',
-          flexWrap: 'wrap',
-          paddingTop: '40px',
-          height: '70vh',
-          width: '100%',
-          alignItems: 'center'
-        }}>
+        <div style = { this.drivers(this.props.mobile) }>
         { this.props.drivers.map(driver => (
-          <DriverCard 
+          <DriverCard
             driver = { driver }
             goTo = { this.goTo }
           />

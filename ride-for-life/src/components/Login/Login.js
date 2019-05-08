@@ -4,10 +4,8 @@ import { Link } from 'react-router-dom'
 
 import { login } from '../../actions';
 import { Container, Text, Column, Form, Button } from '../../simple-library';
-import { MobileContainer, MobileForm, MobileButton } from '../../simple-library-mobile'
 
 class Login extends Component {
-  // state
   state = {
     isUser: true,
     credentials: {
@@ -16,33 +14,26 @@ class Login extends Component {
     }
   }
 
-  // styles
-  container = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-
-  mobileContainer = {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center'
- }
-
-
-  under = {
-    fontSize: '1rem',
-    paddingBottom: '30px'
-  }
-
+//Styles
   column = {
     height: '40vh',
     width: '35vw',
     justifyContent: 'space-around'
   }
+
+  container = mobile => ({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: this.props.mobile ? 'column' : 'row',
+    width: this.props.mobile ? '100%' : null,
+    height: this.props.mobile ? '100%' : null,
+  })
+
+  header = mobile => ({
+    color: '#ffffff',
+    paddingBottom: this.props.mobile ? '20px' : null
+  })
 
   input = {
     padding: '15px 5px',
@@ -53,25 +44,21 @@ class Login extends Component {
     borderRadius: '10px'
   }
 
-  header = {
-    color: '#ffffff'
-  }
-
-  headerMobile = {
-    color: '#ffffff',
-    paddingBottom: '20px'
-  }
-
-  mobileLogin = {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center'
-  }
-
   link = {
     textDecoration: 'none',
     color: '#e89980',
     cursor: 'pointer'
+  }
+
+  login = mobile => ({
+    display: this.props.mobile ? 'flex' : null,
+    flexDirection: this.props.mobile ? 'column' : null,
+    justifyContent: this.props.mobile ? 'center' : null
+  })
+
+  under = {
+    fontSize: '1rem',
+    paddingBottom: '30px'
   }
 
   // methods
@@ -101,121 +88,84 @@ class Login extends Component {
   // render
   render() {
     const { phoneNumber, password } = this.state.credentials;
-
-    if(this.props.mobile) {
       if(this.props.loggingIn) {
-        return <div>Logging In...</div>
-      }
-      else {  
+        return <div>logging in, temp</div>
+      } else {
         return (
-          <MobileContainer
+          <Container
             login
+            style = { this.container(this.props.mobile) }
           >
-            <div style={this.mobileContainer}>
-                <h2 style={this.headerMobile}>Log In</h2>
-                <p style={this.under}>Don't have an account? Sign up <Link to='/signup' style={this.link}>here</Link>.</p>
-                <MobileForm onSubmit = {this.login} style={this.mobileLogin}>
-                  <Text 
-                    name="phoneNumber"
-                    type="text"
-                    value = { phoneNumber }
-                    placeholder="Phone Number"
-                    style = { this.input }
-                    onChange = { this.handleChange }
-                  />
-                  <Text 
-                    name="password"
-                    type="password"
-                    value = { password }
-                    placeholder="Password"
-                    style = { this.input }
-                    onChange = { this.handleChange }
-                  />
-                  <MobileButton 
-                    submit> Log In</MobileButton>
-                </MobileForm>
-            </div>
-          </MobileContainer>
-        )
-      }
-    }
-    else if(this.props.loggingIn) {
-      return <div>logging in, temp</div>
-    } else {
-      return (
-        <Container
-          login
-          style = { this.container }
-        >
-          <Column 
-            style = { this.column }
-          >
-            { this.state.isUser ? 
-              <>
-                <h2 style={this.header}>Log In</h2>
-                <p style = { this.under }>Don't have an account? Sign up <Link to='/signup' style={this.link}>here</Link>.</p>
-                <div></div>
-              </>
-            :
-              <>
-                <h2 style = {this.header}>Driver Login</h2>
-                <div></div>
-                <div></div>
-              </>
-            }
-          </Column>
-          <Form
-            onSubmit = { this.login }
-          >
-            <Column 
-              style = {{
-                ...this.column,
-                alignItems: 'center'
-              }}
+            <Column
+              style = { this.column }
             >
-              <Text 
-                name="phoneNumber"
-                type="text"
-                value = { phoneNumber }
-                placeholder="Phone Number"
-                style = { this.input }
-                onChange = { this.handleChange }
-              />
-              <Text 
-                name="password"
-                type="password"
-                value = { password }
-                placeholder="Password"
-                style = { this.input }
-                onChange = { this.handleChange }
-              />
-              <Button
-                submit
+              { this.state.isUser ?
+                <>
+                  <h2 style={ this.header(this.props.mobile) }>Log In</h2>
+                  <p style = { this.under }>Don't have an account? Sign up <Link to='/signup' style={this.link}>here</Link>.</p>
+                  <div></div>
+                </>
+              :
+                <>
+                  <h2 style = {this.header}>Driver Login</h2>
+                  <div></div>
+                  <div></div>
+                </>
+              }
+            </Column>
+            <Form
+              onSubmit = { this.login }
+              style = { this.login(this.props.mobile) }
+            >
+              <Column
                 style = {{
-                  width: '50%'
+                  ...this.column,
+                  alignItems: 'center'
                 }}
               >
-                Log In
-              </Button>
-            </Column>
-          </Form>
-          { this.state.isUser ?
-            <div style={{
-              color: '#fff',
-              position: 'absolute',
-              bottom: '5px',
-              width: '100vw',
-              textAlign: 'center',
-              fontFamily: 'Source Sans Pro'
-            }}><span>Are you a Ride4Life Driver? Log in <span 
-            style={this.link}
-            onClick = { () => this.setState({ isUser: false }) }
-            >here</span>.</span></div>
-          :
-            null
-          }
-        </Container>
-      )
+                <Text
+                  name="phoneNumber"
+                  type="text"
+                  value = { phoneNumber }
+                  placeholder="Phone Number"
+                  style = { this.input }
+                  onChange = { this.handleChange }
+                />
+                <Text
+                  name="password"
+                  type="password"
+                  value = { password }
+                  placeholder="Password"
+                  style = { this.input }
+                  onChange = { this.handleChange }
+                />
+                <Button
+                  submit
+                  style = {{
+                    width: '50%'
+                  }}
+                >
+                  Log In
+                </Button>
+              </Column>
+            </Form>
+            { this.state.isUser ?
+              <div style={{
+                color: '#fff',
+                position: 'absolute',
+                bottom: '5px',
+                width: '100vw',
+                textAlign: 'center',
+                fontFamily: 'Source Sans Pro'
+              }}><span>Are you a Ride4Life Driver? Log in <span
+              style={this.link}
+              onClick = { () => this.setState({ isUser: false }) }
+              >here</span>.</span></div>
+            :
+              null
+            }
+          </Container>
+        )
     }
   }
 }

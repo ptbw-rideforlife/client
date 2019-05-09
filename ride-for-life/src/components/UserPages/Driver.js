@@ -7,51 +7,59 @@ import { MobileContainer, MobileButton, MobileForm } from '../../simple-library-
 import { Link } from 'react-router-dom'
 
 class Driver extends Component {
+//State
   state = {
     edit: false,
-    newProfile: { 
-      newFirstName: '', 
-      newLastName: '', 
-      newPhoneNumber: '', 
-      newPrice: '', 
-      newCity: '', 
-      newPassword: '' 
+    newProfile: {
+      newFirstName: '',
+      newLastName: '',
+      newPhoneNumber: '',
+      newPrice: '',
+      newCity: '',
+      newPassword: ''
     }
   }
 
-  userContainer = {
-    display: 'flex',
-    width: '100%',
-    height: '100vh',
-    justifyContent: 'space-around',
-    alignItems: 'center'
-  }
-
-  userContainerMobile = {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-    height: '100vh',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-
-  userColumn = {
-    alignItems: 'center',
-    width: '40vw'
-  }
-
+//Styles
   button = {
     width: '300px',
     height: '60px',
     fontSize: '16px'
   }
 
-  logout = () => {
-    localStorage.clear();
-    this.props.history.push('/')
+  editContainer = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 
+  editForm = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+
+  userContainer = mobile => ({
+    display: 'flex',
+    flexDirection: this.props.mobile ? 'column' : 'row',
+    width: '100%',
+    height: '100vh',
+    justifyContent: this.props.mobile ? 'center' : 'space-around',
+    alignItems: 'center'
+  })
+
+  userColumn = {
+    alignItems: 'center',
+    width: '40vw'
+  }
+
+  white = {
+    color: 'white'
+  }
+
+//Functions
   edit = () => {
     this.setState({ edit: true})
   }
@@ -85,137 +93,52 @@ class Driver extends Component {
     .then(() => window.location.reload())
   }
 
+  logout = () => {
+    localStorage.clear();
+    this.props.history.push('/')
+  }
+
     render() {
-      const { 
-        newFirstName, 
-        newLastName, 
-        newPhoneNumber, 
-        newPrice, 
-        newCity, 
-        newPassword 
+      const {
+        newFirstName,
+        newLastName,
+        newPhoneNumber,
+        newPrice,
+        newCity,
+        newPassword
       } = this.state.newProfile
-  
-      const { 
-        firstName, 
-        lastName, 
-        phoneNumber, 
-        price, 
+
+      const {
+        firstName,
+        lastName,
+        phoneNumber,
+        price,
         city
       } = this.props.user
-  
+
       const fields = [
-        firstName, 
-        lastName, 
-        phoneNumber, 
-        price, 
-        city, 
-        "New Password" 
+        firstName,
+        lastName,
+        phoneNumber,
+        price,
+        city,
+        "New Password"
       ]
 
-      if(this.props.mobile) {
-        return (
-          <>
-            { this.state.edit ? 
-              <MobileContainer
-                blue
-                style = {{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
-              >
-                <MobileForm
-                  style = {{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                  }}
-                  onSubmit = { event => this.handleSubmit(event) }
-                >
-                  { fields.map((field, index) => (
-                    <>
-                      <Text 
-                        placeholder = { field }
-                        name = {
-                          index === 0 ? 'newFirstName' :
-                          index === 1 ? 'newLastName' :
-                          index === 2 ? 'newPhoneNumber' :
-                          index === 3 ? 'newPrice' :
-                          index === 4 ? 'newCity' :
-                          'newPassword'
-                        }
-                        value = {
-                          index === 0 ? newFirstName :
-                          index === 1 ? newLastName :
-                          index === 2 ? newPhoneNumber :
-                          index === 3 ? newPrice :
-                          index === 4 ? newCity :
-                          newPassword
-                        }
-                        onChange = { event => this.handleChange(event) }
-                      />
-                    </>
-                  )) }
-                  <MobileButton submit />
-                </MobileForm>
-              </MobileContainer>
-            :
-              <MobileContainer 
-                blue 
-                style={this.userContainerMobile}
-                { ...this.props }
-              >
-                <h2 style={{color: 'white', paddingBottom: '20px'}}>
-                  Hi, {this.props.driver.firstName}!
-                </h2>
-                <Link to = { `/drivers/${this.props.match.params.id}` }>
-                  <Button default style={this.button}>
-                    View Profile
-                  </Button>
-                </Link>
-                <Button 
-                  default 
-                  style={this.button}
-                  onClick = { () => this.edit() }
-                >
-                  Edit Profile
-                </Button>
-                <Link>
-                  <Button default style={this.button}>
-                    Previous Trips
-                  </Button>
-                </Link>
-                <Button logout onClick={() => this.logout()} />
-              </MobileContainer>
-            }
-          </>
-        )
-      } else return (
+      return (
         <>
-          { this.state.edit ? 
+          { this.state.edit ?
             <Container
               blue
-              style = {{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
+              style = { this.editContainer }
             >
               <Form
-                style = {{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
+                style = { this.editForm }
                 onSubmit = { event => this.handleSubmit(event) }
               >
                 { fields.map((field, index) => (
                   <>
-                    <Text 
+                    <Text
                       placeholder = { field }
                       name = {
                         index === 0 ? 'newFirstName' :
@@ -243,12 +166,12 @@ class Driver extends Component {
           :
             <Container
               blue
-              style={this.userContainer}
+              style={ this.userContainer(this.props.mobile) }
               { ...this.props }
             >
               <Column style={this.userColumn}>
                 {/* <img src='{driver.photo1}' /> */}
-                <h2 style={{color: 'white'}}>
+                <h2 style={ this.white }>
                     Hi, {this.props.driver.firstName}!
                 </h2>
               </Column>
@@ -258,14 +181,14 @@ class Driver extends Component {
                   View Profile
                 </Button>
               </Link>
-              <Button 
-                default 
+              <Button
+                default
                 style={this.button}
                 onClick = { () => this.edit() }
               >
                 Edit Profile
               </Button>
-              <Button 
+              <Button
                 default
                 style={this.button}
                 onClick = { () => this.getReviews() }

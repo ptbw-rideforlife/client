@@ -7,6 +7,7 @@ import { Container, Column, Button, Form, Text } from '../../simple-library';
 import { MobileContainer, MobileButton, MobileForm } from '../../simple-library-mobile';
 
 class User extends Component {
+//State
   state = {
     edit: false,
     newProfile: {
@@ -18,6 +19,26 @@ class User extends Component {
     }
   }
 
+//Styles
+  button = {
+    width: '300px',
+    height: '60px',
+    fontSize: '16px'
+  }
+
+  editContainer = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+
+  input = mobile => ({
+    width: this.props.mobile ? '70vw' : '30vw',
+    height: '60px',
+    margin: '10px 0'
+  })
+
   userContainer = {
     display: 'flex',
     justifyContent: 'center',
@@ -25,38 +46,20 @@ class User extends Component {
     width: '100%',
   }
 
-  userColumn = {
-    alignItems: 'center',
-    width: '40vw'
-  }
-
-  userColumnMobile = {
+  userColumn = mobile => ({
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: this.props.mobile ? 'column' : 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    height: '100vh'
+    justifyContent: this.props.mobile ? 'center' : null,
+    width: this.props.mobile ? '100%' : '40vw',
+    height: this.props.mobile ? '100vh' : null
+  })
+
+  white = {
+    color: '#fff'
   }
 
-  button = {
-    width: '300px',
-    height: '60px',
-    fontSize: '16px'
-  }
-
-  input = {
-    width: '30vw',
-    height: '60px',
-    margin: '10px 0'
-  }
-
-  mobileInput = {
-    width: '70vw',
-    height: '60px',
-    margin: '10px 0'
-  }
-
+//Functions
   logout() {
     localStorage.clear();
     window.location.href='/';
@@ -118,105 +121,22 @@ class User extends Component {
       "New Password"
     ]
 
-    if(this.props.mobile) {
-      return (
-        <>
-          { this.state.edit ? 
-            <MobileContainer
-              blue
-              style = {{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <MobileForm
-                style = {{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
-                onSubmit = { event => this.handleSubmit(event) }
-              >
-                { fields.map((field, index) => (
-                  <>
-                    <Text 
-                      placeholder = { field }
-                      style = { this.mobileInput }
-                      name = {
-                        index === 0 ? 'newFirstName' :
-                        index === 1 ? 'newLastName' :
-                        index === 2 ? 'newAddress' :
-                        index === 3 ? 'newPhoneNumber' :
-                        'newPassword'
-                      }
-                      value = {
-                        index === 0 ? newFirstName :
-                        index === 1 ? newLastName :
-                        index === 2 ? newAddress :
-                        index === 3 ? newPhoneNumber :
-                        newPassword
-                      }
-                      onChange = { event => this.handleChange(event) }
-                    />
-                  </>
-                )) }
-                <MobileButton submit />
-              </MobileForm>
-            </MobileContainer>
-          :
-            <MobileContainer
-              blue
-              { ...this.props }
-            >
-              <div style={this.userColumnMobile}>
-                <h2 style={{color: 'white', paddingBottom: '20px'}}>Hi, { this.props.user.firstName } !</h2>
-                <Link to='/map'>
-                  <Button default style={this.button}> Request a Ride </Button>
-                </Link>
-                <Link to='/drivers'><Button default style={this.button}>Browse Drivers</Button></Link>
-                <Button 
-                  default 
-                  style={this.button}
-                  onClick = { () => this.edit() }
-                >
-                  Edit Profile
-                </Button>
-                <Link to='/users/:id/previous'><Button default style={this.button}>Previous Trips</Button></Link>
-                <Button logout onClick={() => this.logout()} />
-              </div>
-            </MobileContainer>
-          }
-        </>
-      )
-    } else return (
+    return (
       <>
-        { this.state.edit ? 
+        { this.state.edit ?
           <Container
             blue
-            style = {{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
+            style = { this.editContainer }
           >
             <Form
-              style = {{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
+              style = { this.editContainer }
               onSubmit = { event => this.handleSubmit(event) }
             >
               { fields.map((field, index) => (
                 <>
-                  <Text 
+                  <Text
                     placeholder = { field }
-                    style = { this.input }
+                    style = { this.input(this.props.mobile) }
                     name = {
                       index === 0 ? 'newFirstName' :
                       index === 1 ? 'newLastName' :
@@ -241,19 +161,19 @@ class User extends Component {
         :
           <Container
             { ...this.props }
-            blue 
+            blue
             style={this.userContainer}
           >
-            <Column style={this.userColumn}>
-              <h2 style = {{ color: 'white' }}>Hi, { this.props.user.firstName } !</h2>
+            <Column style={this.userColumn(this.props.mobile)}>
+              <h2 style = { this.white }>Hi, { this.props.user.firstName } !</h2>
             </Column>
-            <Column style={this.userColumn}>
+            <Column style={this.userColumn(this.props.mobile)}>
                 <Link to='/map'>
                   <Button default style={this.button}> Request a Ride </Button>
                 </Link>
                 <Link to='/drivers'><Button default style={this.button}>Browse Drivers</Button></Link>
-                <Button 
-                  default 
+                <Button
+                  default
                   style={this.button}
                   onClick = { () => this.edit() }
                 >

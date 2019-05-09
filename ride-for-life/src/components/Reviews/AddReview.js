@@ -3,6 +3,13 @@ import { Container, Text, Button, Form } from '../../simple-library';
 import { MobileContainer, MobileButton } from '../../simple-library-mobile'
 
 class AddReview extends React.Component {
+//Styles
+  buttons = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    paddingTop: '20px'
+  }
+  
   container = {
     display: 'flex',
     alignItems: 'center',
@@ -14,21 +21,14 @@ class AddReview extends React.Component {
     padding: '5px 0'
   }
 
-  buttons = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    paddingTop: '20px'
+  submit = {
+    width: '25%',
+    alignSelf: 'flex-end',
+    marginTop: '10px'
   }
 
   render() {
-    if(this.props.mobile) {
-      return (
-        <MobileContainer>
-        </MobileContainer>
-      )
-    }
-    
-   else return (
+    return (
       <Container
         blue
         style = { this.container }
@@ -42,8 +42,8 @@ class AddReview extends React.Component {
           <div>
             <p style={this.paragraph}>Please rate your driver out of 5 stars:</p>
             <p>-- RATING --</p>
-            <Text 
-              textarea 
+            <Text
+              textarea
               cols = { 60 }
               rows = { 10 }
               placeholder="Add a review..."
@@ -54,11 +54,7 @@ class AddReview extends React.Component {
               <Button delete/>
               <Button
                   submit
-                  style = {{
-                    width: '25%',
-                    alignSelf: 'flex-end',
-                    marginTop: '10px'
-                  }} />
+                  style = { this.submit } />
             </div>
           </div>
         </Form>

@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import { Container } from '../../simple-library';
 import MapGL from 'react-map-gl';
 
-import { Button, Text, Form } from '../../simple-library'
+import { Container, Button, Text, Form } from '../../simple-library'
 
 const TOKEN = 'pk.eyJ1IjoiZG91Z2xhc2pvcmRhbjIiLCJhIjoiY2p2MWdzOGxoMXR0aTRkc2sxa2ZuOWlrcyJ9.YNCXCmHFh_w4ppr-6DoA0g'
 
 export default class Map extends Component {
+//State
+
   state = {
     viewport: {
       latitude: 0,
@@ -21,6 +22,7 @@ export default class Map extends Component {
     found: false
   }
 
+//Styles
   container = {
     height: '80%',
     width: '100%',
@@ -33,8 +35,25 @@ export default class Map extends Component {
     left: 0
   }
 
+  flex = {
+    display: 'flex'
+  }
+
+  mapGL = {
+    zIndex: -1000,
+    position: 'absolute',
+    top: 0,
+    left: 0
+  }
+
+//Functions
   componentDidMount() {
     this.getLocation()
+  }
+
+  found = () => {
+    this.setState({ searching: false })
+    setTimeout(() => this.setState({ found: true }), 300)
   }
 
   getLocation = () => {
@@ -43,6 +62,11 @@ export default class Map extends Component {
     } else {
       console.log("Geolocation is not supported by this browser.");
     }
+  }
+
+  searching = () => {
+    this.setState({ searching: true })
+    setTimeout(this.found, 5000)
   }
 
   showPosition = position => {
@@ -55,47 +79,29 @@ export default class Map extends Component {
     })
   }
 
-  searching = () => {
-    this.setState({ searching: true })
-    setTimeout(this.found, 5000)
-  }
-
-  found = () => {
-    this.setState({ searching: false })
-    setTimeout(() => this.setState({ found: true }), 300)
-  }
-
   render() {
     return (
-      <Container 
+      <Container
         map
-        style = {{
-          display: 'flex'
-        }}
+        style = { this.flex }
         { ...this.props }
       >
         <MapGL
-          style = {{
-            zIndex: -1000,
-            position: 'absolute',
-            top: 0,
-            left: 0
-          }}
+          style = { this.mapGL }
           { ...this.state.viewport }
           mapStyle="mapbox://styles/douglasjordan2/cjvbg2plu5nbg1fr77be20ssp"
-          mapboxApiAccessToken={ TOKEN } 
+          mapboxApiAccessToken={ TOKEN }
           onViewportChange={ (viewport) => this.setState({ viewport }) }
         />
         <div style = { this.container }>
-          { this.state.searching ? 
+          { this.state.searching ?
             <Searching />
           : this.state.found ?
             <RideFound />
-          :
-            null
+          : null
           }
         </div>
-        <MapInput 
+        <MapInput
           searching = { this.searching }
         />
       </Container>
@@ -104,11 +110,13 @@ export default class Map extends Component {
 }
 
 class Searching extends Component {
+//State
   state = {
     interval: '',
     dots: ''
   }
 
+//Functions
   componentDidMount() {
     this.setState({ interval: setInterval(this.incrementDot, 300) })
   }
@@ -125,6 +133,7 @@ class Searching extends Component {
     }
   }
 
+//Styles
   searching = {
     width: '500px',
     height: '120px',
@@ -151,6 +160,8 @@ class Searching extends Component {
 };
 
 export const RideFound = props => {
+
+//Styles
   const requestContainer = () => ({
     height: '175px',
     width: '300px',
@@ -166,7 +177,7 @@ export const RideFound = props => {
   return (
     <div style={requestContainer()}>
       {/* //placeholder - estimated pickup time */}
-      <p>Estimated Pickup Time: 6 minutes</p> 
+      <p>Estimated Pickup Time: 6 minutes</p>
       {/* placeholder - estimated cost  */}
       <p>Estimated Cost: $4.72</p>
       <Button>Request Ride</Button>
@@ -175,23 +186,27 @@ export const RideFound = props => {
 };
 
 class MapInput extends Component {
+//State
   state = {
     destination: '',
     requested: false
   }
 
-  mapInput = {
-    position: 'fixed',
-    bottom: '0',
-    left: '0',
-    width: '100%',
-    backgroundColor: '#f5f5f5',
-    height: '25vh',
+//Styles
+  button = {
+    height: '40px'
+  }
+
+  btnContainer = {
     display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    zIndex: 1000,
-    borderTop: '2px solid #4f6d7a'
+    justifyContent: 'space-evenly'
+  }
+
+  form = {
+    width: '40vw',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   }
 
   howLongContainer = {
@@ -209,11 +224,21 @@ class MapInput extends Component {
     textAlign: 'center'
   }
 
-  btnContainer = {
+  mapInput = {
+    position: 'fixed',
+    bottom: '0',
+    left: '0',
+    width: '100%',
+    backgroundColor: '#f5f5f5',
+    height: '25vh',
     display: 'flex',
-    justifyContent: 'space-evenly'
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    zIndex: 1000,
+    borderTop: '2px solid #4f6d7a'
   }
 
+//Functions
   handleInputChange = event => {
     this.setState({ [event.target.name] : event.target.value })
   }
@@ -242,30 +267,18 @@ class MapInput extends Component {
       :
         <Form
           onSubmit = { event => this.requestRide(event) }
-          style={{
-            width: '40vw',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}
+          style={ this.form }
         >
           <Text
             placeholder="Destination Address"
             name="destination"
             value = { this.state.destination }
             onChange={ event => this.handleInputChange(event) }
-            style = {{
-              height: 40,
-              width: '75%',
-              padding: '0 10px',
-              fontSize: '1rem'
-            }}
+            style = { this.mapInput }
           />
-          <Button 
+          <Button
             submit
-            style = {{
-              height: 40
-            }}
+            style = { this.button }
           >
             Search Nearby
           </Button>

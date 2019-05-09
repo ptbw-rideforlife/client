@@ -6,6 +6,8 @@ import { Container, Form, Button, Text } from '../../simple-library';
 import { MobileContainer, MobileForm, MobileButton } from '../../simple-library-mobile'
 
 class SignUp extends Component {
+
+//State
   state = {
     formType: '',
     passwordConfirm: '',
@@ -36,6 +38,7 @@ class SignUp extends Component {
     passwordMatch: true
   }
 
+//Fields
   mFields = [
     "First Name",
     "Last Name",
@@ -66,6 +69,7 @@ class SignUp extends Component {
     "Re-Enter Password"
   ]
 
+//Functions
   componentDidMount() {
     const form = this.props.match.params.form;
     this.setState({ formType: form })
@@ -104,12 +108,12 @@ class SignUp extends Component {
     event.preventDefault();
 
     if(this.state.formType === 'mother') {
-      const { 
-        mFirstName, 
-        mLastName, 
-        mAddress, 
-        mPhoneNumber, 
-        mPassword 
+      const {
+        mFirstName,
+        mLastName,
+        mAddress,
+        mPhoneNumber,
+        mPassword
       } = this.state.mFields;
 
       const profile = {
@@ -133,13 +137,13 @@ class SignUp extends Component {
       .then(() => this.props.history.push(`/users/${this.props.id}`))
 
     } else if(this.state.formType === 'driver') {
-      const { 
-        dFirstName, 
-        dLastName, 
-        dPhoneNumber, 
-        dPrice, 
-        dCity, 
-        dPassword 
+      const {
+        dFirstName,
+        dLastName,
+        dPhoneNumber,
+        dPrice,
+        dCity,
+        dPassword
       } = this.state.dFields;
 
       const profile = {
@@ -193,19 +197,26 @@ class SignUp extends Component {
     }
   }
 
+//Styles
+  container = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-evenly'
+  }
+
+  form = mobile => ({
+    width: this.props.mobile ? '100%' : null,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: this.props.mobile ? 'center' : null
+  })
+
   input = {
     width: '300px',
     height: '50px',
     margin: '10px 0',
     fontSize: '14px',
     paddingLeft: '10px'
-  }
-
-  formMobile = {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
   }
 
   signUpHeader = {
@@ -219,12 +230,12 @@ class SignUp extends Component {
   }
 
   render() {
-    const { 
-      mFirstName, 
-      mLastName, 
-      mPhoneNumber, 
-      mAddress, 
-      mPassword 
+    const {
+      mFirstName,
+      mLastName,
+      mPhoneNumber,
+      mAddress,
+      mPassword
     } = this.state.mFields;
 
     const {
@@ -236,141 +247,42 @@ class SignUp extends Component {
       dPassword
     } = this.state.dFields
 
-    const { 
-      cgFirstName, 
-      cgLastName, 
-      moFirstName, 
-      moLastName, 
-      cgPhoneNumber, 
-      cgAddress, 
-      cgPassword, 
-      cgPasswordConfirm 
+    const {
+      cgFirstName,
+      cgLastName,
+      moFirstName,
+      moLastName,
+      cgPhoneNumber,
+      cgAddress,
+      cgPassword,
+      cgPasswordConfirm
     } = this.state.cgFields;
 
     const { passwordConfirm } = this.state;
 
-    if(this.props.mobile) {
-      return (
-        <MobileContainer 
-          style={this.signUpContainer}
-          { ...this.props }
-        >
-            <h2 style={this.signUpHeader}>Sign Up as a { this.state.formType.split('').map((a, i) => i === 0 ? a.toUpperCase() : a).join('') }</h2>
-            <MobileForm
-              style = { this.formMobile }
-              onSubmit = { this.state.formType === 'caregiver' ? event => this.cgSubmit(event) : event => this.defaultSubmit(event) } >
-                { this.state.formType == 'mother' ? 
-                  this.mFields.map((field, index) => (
-                    <Text 
-                      placeholder = { field }
-                      style = { this.input }
-                      name = { 
-                        index === 0 ? 'mFirstName' :
-                        index === 1 ? 'mLastName' :
-                        index === 2 ? 'mPhoneNumber' :
-                        index === 3 ? 'mAddress' :
-                        index === 4 ? 'mPassword' :
-                        'passwordConfirm' 
-                      }
-                      value = {
-                        index === 0 ? mFirstName :
-                        index === 1 ? mLastName :
-                        index === 2 ? mPhoneNumber :
-                        index === 3 ? mAddress :
-                        index === 4 ? mPassword :
-                        passwordConfirm
-                      }
-                      onChange = { event => this.defaultHandleChange(event) }
-                    />
-                  ))
-                : this.state.formType === 'driver' ?
-                  this.dFields.map((field, index) => (
-                    <Text 
-                      placeholder = { field }
-                      style = { this.input }
-                      name = { 
-                        index === 0 ? 'dFirstName' :
-                        index === 1 ? 'dLastName' :
-                        index === 2 ? 'dPhoneNumber' :
-                        index === 3 ? 'dPrice' :
-                        index === 4 ? 'dCity' :
-                        index === 5 ? 'dPassword' :
-                        'passwordConfirm' 
-                      }
-                      value = {
-                        index === 0 ? dFirstName :
-                        index === 1 ? dLastName :
-                        index === 2 ? dPhoneNumber :
-                        index === 3 ? dPrice :
-                        index === 4 ? dCity :
-                        index === 5 ? dPassword :
-                        passwordConfirm
-                      }
-                      onChange = { event => this.handleChange(event) }
-                    />
-                  ))
-                  : this.cgFields.map((field, index) => (
-                    <Text 
-                      placeholder = { field }
-                      style = { this.input }
-                      name = {
-                        index === 0 ? 'cgFirstName' :
-                        index === 1 ? 'cgLastName' :
-                        index === 2 ? 'mFirstName' :
-                        index === 3 ? 'mLastName' :
-                        index === 4 ? 'cgPhoneNumber' :
-                        index === 5 ? 'cgAddress' :
-                        index === 6 ? 'cgPassword' :
-                        'cgPasswordConfirm'
-                      }
-                      value = {
-                        index === 0 ? cgFirstName :
-                        index === 1 ? cgLastName :
-                        index === 2 ? moFirstName :
-                        index === 3 ? moLastName :
-                        index === 4 ? cgPhoneNumber :
-                        index === 5 ? cgAddress :
-                        index === 6 ? cgPassword :
-                        passwordConfirm
-                      }
-                      onChange = { event => this.cgHandleChange(event) }
-                    />
-                  ))
-                }
-              <MobileButton submit/>
-            </MobileForm>
-        </MobileContainer>
-      )
-    } else return (
-      <Container 
+    return (
+      <Container
         gray
-        style = {{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-evenly'
-        }}
+        style = { this.container }
         { ...this.props }
       >
         <h2>Sign up as a { this.state.formType.split('').map((a, i) => i === 0 ? a.toUpperCase() : a).join('') }</h2>
-        <Form 
-          style = {{
-            display: 'flex',
-            flexDirection: 'column'
-          }}
+        <Form
+          style = { this.form(this.props.mobile) }
           onSubmit = { event => this.submit(event) }
         >
-          { this.state.formType == 'mother' ? 
+          { this.state.formType == 'mother' ?
               this.mFields.map((field, index) => (
-                <Text 
+                <Text
                   placeholder = { field }
                   style = { this.input }
-                  name = { 
+                  name = {
                     index === 0 ? 'mFirstName' :
                     index === 1 ? 'mLastName' :
                     index === 2 ? 'mPhoneNumber' :
                     index === 3 ? 'mAddress' :
                     index === 4 ? 'mPassword' :
-                    'passwordConfirm' 
+                    'passwordConfirm'
                   }
                   value = {
                     index === 0 ? mFirstName :
@@ -385,17 +297,17 @@ class SignUp extends Component {
               ))
             : this.state.formType === 'driver' ?
               this.dFields.map((field, index) => (
-                <Text 
+                <Text
                   placeholder = { field }
                   style = { this.input }
-                  name = { 
+                  name = {
                     index === 0 ? 'dFirstName' :
                     index === 1 ? 'dLastName' :
                     index === 2 ? 'dPhoneNumber' :
                     index === 3 ? 'dPrice' :
                     index === 4 ? 'dCity' :
                     index === 5 ? 'dPassword' :
-                    'passwordConfirm' 
+                    'passwordConfirm'
                   }
                   value = {
                     index === 0 ? dFirstName :
@@ -410,7 +322,7 @@ class SignUp extends Component {
                 />
               ))
             : this.cgFields.map((field, index) => (
-                <Text 
+                <Text
                   placeholder = { field }
                   style = { this.input }
                   name = {

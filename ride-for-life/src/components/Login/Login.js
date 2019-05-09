@@ -41,7 +41,6 @@ class Login extends Component {
     borderRadius: '10px',
     fontSize: '14px',
     margin: '20px 0',
-    borderRadius: '10px'
   }
 
   link = {

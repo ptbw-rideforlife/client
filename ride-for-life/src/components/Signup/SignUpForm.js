@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 
 import { add, login } from '../../actions';
 import { Container, Form, Button, Text } from '../../simple-library';
-import { MobileContainer, MobileForm, MobileButton } from '../../simple-library-mobile'
 
 class SignUp extends Component {
 

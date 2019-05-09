@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container, Text, Button, Form } from '../../simple-library';
-import { MobileContainer, MobileButton } from '../../simple-library-mobile'
 
 class AddReview extends React.Component {
 //Styles
@@ -9,7 +8,7 @@ class AddReview extends React.Component {
     justifyContent: 'space-between',
     paddingTop: '20px'
   }
-  
+
   container = {
     display: 'flex',
     alignItems: 'center',

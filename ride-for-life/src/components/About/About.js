@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Button } from '../../simple-library';
-import { MobileContainer, MobileButton } from '../../simple-library-mobile'
 
 const About = props => {
     //styles

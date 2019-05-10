@@ -124,6 +124,7 @@ class Driver extends Component {
                   justifyContent: 'center',
                   alignItems: 'center'
                 }}
+                { ...this.props }
               >
                 <MobileForm
                   style = {{
@@ -203,6 +204,7 @@ class Driver extends Component {
                 justifyContent: 'center',
                 alignItems: 'center'
               }}
+              { ...this.props }
             >
               <Form
                 style = {{

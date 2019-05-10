@@ -202,6 +202,7 @@ class User extends Component {
               justifyContent: 'center',
               alignItems: 'center'
             }}
+            { ...this.props }
           >
             <Form
               style = {{

@@ -211,7 +211,8 @@ class SignUp extends Component {
   signUpHeader = {
     padding: '70px 0',
     textAlign: 'center',
-    width: '100%'
+    width: '100%', 
+    color: '#fff'
   }
 
   signUpContainer = {
@@ -351,7 +352,7 @@ class SignUp extends Component {
         }}
         { ...this.props }
       >
-        <h2>Sign up as a { this.state.formType.split('').map((a, i) => i === 0 ? a.toUpperCase() : a).join('') }</h2>
+        <h2 style={{color: '#fff'}}>Sign up as a { this.state.formType.split('').map((a, i) => i === 0 ? a.toUpperCase() : a).join('') }</h2>
         <Form 
           style = {{
             display: 'flex',
